@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<title>Dapplink</title>
+	<style>
+	 * {
+             margin: 0;
+             padding: 0;
+             border: 0;
+	     box-sizing: inherit;
+	 }
+	 :root {
+	     --white: #e4eafa;
+	 }
+	 html {
+	     /* font-size: 67.5%; */
+	     pfont-size: 5%vh
+	 }
+	 body {
+             background-color: #000C1F;
+             background-image: url(assets/images/bg_cut_01.png), url(assets/images/bg_cut_05.png);
+             background-repeat: no-repeat, no-repeat;
+             background-size: 50vw;
+             background-position: left top, right bottom;
+             min-height: 100vh;
+	     box-sizing: border-box;
+	     font-family: 'Roboto', sans-serif;
+	     font-size: inherit;
+	 }
+	 .top-menu__container {
+	     background-color: rgba(43,44,48,.7);
+	     height: 3rem;
+	 }
+	 .main-menu {
+	     /* display: inline-block; */
+	     font-size: 1.4rem;
+	 }
+	 .main-menu__list > li {
+	     display: inline-block;
+	     width: 7rem;
+	     text-align: center;
+	 }
+	 .main-menu__link,
+	 .main-menu__link:link,
+	 .main-menu__link:visited {
+	     margin: .3rem 0;
+	     width: 100%;
+	     height: 2.4rem;
+	     color: rgb(99,103,104);
+	     color: #284160;
+	     text-decoration: none;
+	     text-transform: uppercase;
+	     line-height: 2.4rem;
+	     vertical-align: middle;
+	     display: block;
+	     font-weight: bold;
+	     background-color: #284160;
+	     color: #e4eafa;
+	     clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+	 }
+	 .main-menu__list > li:nth-child(2) a {
+	     margin-left: -1.5rem;
+	     color: #e4eafa;
+	     background-color: #4397bc;
+	 }
+	 .main-menu__list > li:nth-child(3) a {
+	     margin-left: -3rem;
+	 }
+	 .main-menu__list > li:nth-child(4) a {
+	     margin-left: -4.5rem;
+	 }
+	 .main-menu__list > li:nth-child(5) a {
+	     margin-left: -6rem;
+	 }
+	 .main-menu__list > li:nth-child(6) a {
+	     margin-left: -7.5rem;
+	 }
+	 .main-menu__list > li:nth-child(7) a {
+	     margin-left: -9rem;
+	 }
+	 .main-menu__list > li:nth-child(8) a {
+	     margin-left: -10.5rem;
+	 }
+	 .main-menu__icon {
+	     vertical-align: middle;
+	     font-size: 2rem;
+	 }
+	 .jumbo {
+	     position: absolute;
+	     width: 75vw;
+	     height: calc( 75vw / 1000 * 568);
+	     top: 3.7rem;
+	     left: 50%;
+	     transform: translateX(-50%);
+	     background-image: url(jambo.png);
+	     background-size: cover;
+	     background-color: green;
+	     background-repeat: no-repeat;
+	     font-size: 1.2rem;
+	     padding: 11rem;
+	     padding-top: 13rem;
+	 }
+	 .jumbo > p {
+	     color: var(--white);
+	     text-shadow: 1px 1px 4px var(--white);
+	     margin-bottom: 1.3rem;
+	     width: 90%;
+	 }
+	 .top-menu__user-menu {
+	     display: inline-block;
+	 }
+	 .ava {
+	     width: 3rem;
+	     height: 3rem;
+	     clip-path: circle(50%);
+	     object-fit: cover;
+	     object-position: top center;
+	 }
+	</style>
+    </head>
+    <body>
+	<header class="top-menu__container">
+	    <section class="main-menu">
+		<ul class="main-menu__list">
+		    <li><a class="main-menu__link" id="main-menu__home"      href="#"><i class="material-icons main-menu__icon">home</i></a></li>
+		    <li><a class="main-menu__link" id="main-menu__help"      href="#"><i class="material-icons main-menu__icon">help</i></a></li>
+		    <li><a class="main-menu__link" id="main-menu__download"  href="#"><i class="material-icons main-menu__icon">file_download</i></a></li>
+		    <li><a class="main-menu__link" id="main-menu__shop"      href="#"><i class="material-icons main-menu__icon">shopping_cart</i></a></li>
+		    <li><a class="main-menu__link" id="main-menu__www"       href="#">WWW</a></li>
+		    <li><a class="main-menu__link" id="main-menu__dpwa"      href="#">DPWA</a></li>
+		    <li><a class="main-menu__link" id="main-menu__art"       href="#">ART</a></li>
+		    <li><a class="main-menu__link" id="main-menu__apk"       href="#">APK</a></li>
+		    <li></li>
+		</ul>
+	    </section>
+	    <section class="top-menu__user-menu" style="color: white; right: 0;; position: absolute; top:0;">
+		NFT: 18 DLC: 30 ETH: 0.785
+                <img class="ava" src="http://t1.gstatic.com/images?q=tbn:ANd9GcQQn6_Hz9zTckXYuOa1biiMhulnHv6pKtadAFcdg79yocrL3Y29"/>
+	    </section>
+	</header>
+        <div class="jumbo">
+		<p>
+		    Dapplink technology is a way to build and run websites, applications
+		    and services directly on the blockchain without having to have and
+		    maintain servers, databases and storage systems.  Your applications and
+		    data will be kept and available forever without any additional
+		    costs. Anyone may get access to your digital products using a web
+		    browser or via http request. One may consider dapplink as extension
+		    of the World Wide Web to the blockchain area.
+		</p>
+                <p>
+		    All resources in the Dapplink infrastructure are represented as NFT,
+		    so any kind of your work (website, application, art) become your own
+		    NFT-token at the moment of its creation. You may publish your works in
+		    the dapplink destribution service where users may see them. Also
+		    dapplink provide Dapplink Coin (DLC) for internal payments and
+		    full-featured economical ecosystem where users, developers and
+		    creators can mutually beneficial cooperate with each other.
+		</p>
+	    </div>
+    </body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> 
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>  -->
+	<style>
+	 * { box-sizing: inherit; margin: inherit; padding: inherit;
+	 }
+	 :root {
+	     --white: #e4eafa;
+	 }
+	 li {font-family: monospace;}
+	 html {
+	     font-size: 67.5%;
+	     font-size: 10px;
+	 }
+	 body {
+	     margin: 0;
+	     border: 0;
+	     padding: 0;
+	     box-sizing: border-box;
+	     min-height: 100vh;
+	     font-family: 'Roboto', sans-serif;
+	     font-size: inherit;
+	     display: grid;
+	     background-color: #000C1F;
+	     grid-template-rows: 4rem 1fr;
+	     grid-template-columns: 100%;
+	 }
+	 /* main menu */
+	 header {
+	     display: flex;
+	     justify-content: space-between;
+	     align-items: center;
+	     background-color: rgba(43,44,48,.7);
+	 }
+	 .main-menu {
+	     grid-area: 1/1/2/2;
+	     width: 70rem;
+	     height: 100%;
+	     display: flex;
+	     flex-direction: row;
+	     align-items: center;
+	 }
+	 .main-menu__link {
+	     height: 80%;
+	     width: 20rem;
+	     display: flex;
+	     align-items: center;
+	     justify-content: center;
+	     background-color: #284160;
+	     font-size: 2rem;
+	     font-weight: bold;
+	     color: var(--white);
+	     clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+	 }
+	 .main-menu__link:first-child {
+	     margin-left: .3rem;
+	 }
+	 .main-menu__link:not(first-child) {
+	     margin-left: -1.5rem;
+	 }
+	 .main-menu__link:hover {
+	     background-color: #6cc8f1;
+	     cursor: pointer;
+	 }
+	 #main-menu__www {
+	     background-color: #4397bc;
+	 }
+	 .main-menu__icon:not(.home-icon) {
+	     padding-left: 1.5rem;
+	 }
+	 /* user menu */
+	 #user-menu {
+	     width: 25rem;
+	     height: 80%;
+	     /* background-color: green; */
+	     display: flex;
+	     justify-content: flex-end;
+	 }
+	 #user-log-in-button {
+	     background-color: transparent;
+	     border: 2px solid var(--white);
+	     margin-right: 1rem;
+	     /* border-radius: 10px; */
+	     height: 100%;
+	     width: 15rem;
+	     background-color: #223752;
+	     color: var(--white);
+	     font-weight: bold;
+	     text-transform: uppercase;
+	 }
+	 #user-account-menu {
+	     width: 100%;
+	     height: 100%;
+	     color: white;
+	     display: flex;
+	     font-size: 1.5rem;
+	     
+	     align-items: center;
+	     justify-content: space-between;
+	     margin-right: 1rem;
+	 }
+	 .user-account-menu__asset {
+	     font-weight: bold;
+	     color: var(--white);
+	     cursor: pointer;
+	 }
+	 #user-account-menu__nft {
+	     color: #adde46;
+	 }
+
+	 #user-account-menu__eth {
+	     color: #f7cf6f;
+	 }
+	 /* ---------------------------------------- */
+	 main {
+	     /* background-color: yellow; */
+	     /* background-image: radial-gradient(circle, 50%, at 50% 50%, #161719, #3f4248); */
+	     /* background-image: radial-gradient( circle, #161719, #3f4248 500%); */
+	     background-image: radial-gradient(circle, #161719 20%, #3f4248 900%);
+	     color: #e2e2e2;
+	     grid-area: 2/1/3/2;
+	 }
+	</style>
+	<title>Dapplink</title>
+	<style>
+	</style>
+    </head>
+    <body>
+	<header class="top-menu__container">
+	    <section id="main-menu" class="main-menu">
+		<div class="main-menu__link" id="main-menu__home"     ><i class="material-icons main-menu__icon home-icon">home</i></div>
+		<div class="main-menu__link" id="main-menu__help"     ><i class="material-icons main-menu__icon">help</i></div>
+		<div class="main-menu__link" id="main-menu__download" ><i class="material-icons main-menu__icon">file_download</i></div>
+		<div class="main-menu__link" id="main-menu__shop"     ><i class="material-icons main-menu__icon">shopping_cart</i></div>
+		<div class="main-menu__link" id="main-menu__www"      >WWW</div>
+		<div class="main-menu__link" id="main-menu__dpwa"     >DPWA</div>
+		<div class="main-menu__link" id="main-menu__art"      >ART</div>
+		<div class="main-menu__link" id="main-menu__apk"      >APK</div>
+	    </section>
+	    <section id="user-menu">
+		<div id="user-account-menu">
+                    <div class="user-account-menu__asset">NFT: <span id="user-account-menu__nft"></span></div>
+                    <div class="user-account-menu__asset">ETH: <span id="user-account-menu__eth"></span></div>
+		</div>
+		<div id="user-login-menu">
+		    <button id="user-log-in-button">Sign in</button>
+		</div>
+	    </section>
+	</header>
+	<main>
+	    <section id="tab-home" class="tab">
+		<h1>Home</h1>
+                <div style="background-color: red; width: 10rem; height: 10rem;"></div>
+		<div class="jumbo">
+		    <p>
+			Dapplink technology is a way to build and run websites, applications
+			and services directly on the blockchain without having to have and
+			maintain servers, databases and storage systems.  Your applications and
+			data will be kept and available forever without any additional
+			costs.  Anyone may get access to your digital products using a web
+			browser or via http request.  One may consider dapplink as extension
+			of the World Wide Web to the blockchain area.
+		    </p>
+		    <p>
+			All resources in the Dapplink infrastructure are
+			represented as NFT, so any kind of your work
+			(website, application, art) become your own
+			NFT-token at the moment of its creation.  You may
+			publish your works in the dapplink destribution
+			service where users may see them.  Also dapplink
+			provide full-featured economical ecosystem where
+			users, developers and creators can mutually
+			beneficial cooperate with each other.
+		    </p>
+		</div>
+		<hr/>
+	    </section>
+            <section id="tab-help" class="tab">
+		<h1>Documentation</h1>
+		<!-- temporarily no content -->
+		<hr/>
+            </section>
+	    <section id="tab-downloads" class="tab">
+		<h1>Downloads</h1>
+		<!-- temporarily no content -->
+		<hr/>
+	    </section>
+            <section id="tab-shop" class="tab">
+		<h1>Store</h1>
+		<ul>
+                    <li>Name
+			<ul>
+			    <li>Icon</li>
+			    <li>Description</li>
+			    <li>Type</li>
+			    <li>Price</li>
+                            <li>Details</li>
+			</ul>
+		    </li>
+                    <li><i>Some ART</i></li>
+                    <li><i>Some ART</i></li>
+                    <li><i>Some WWW</i></li>
+		</ul>
+		<hr/>
+            </section>
+            <section id="tab-www" class="tab">
+		<h1>WWW</h1>
+		<hr/>
+            </section>
+            <section id="tab-dpwa" class="tab">
+		<h1>DPWA</h1>
+		<hr/>
+            </section>
+            <section id="tab-art" class="tab">
+		<h1>ART</h1>
+		<hr/>
+            </section>
+            <section id="tab-apk" class="tab">
+		<h1>APK</h1>
+		<ul>
+                    <li>Name</li>
+                    <li>Descripton</li>
+                    <li>Address</li>
+                    <li><button>Details</button></li>
+		    <li><button>Install</button></li>
+		</ul>
+		<hr/>
+            </section>
+            <section id="tab-user-nft" class="tab">
+		<h1>User NFT</h1>
+		<ul id="tab-user-nft__ul">
+
+		</ul>
+		<button id="user-nft-make-button">Make</button>
+		<hr/>
+            </section>
+	    <section id="tab-user-make-nft" class="tab">
+		<h1>Make NFT</h1>
+		<form>
+                    <label for="make-nft-input__domain">NFT Domain name:</label><br/>
+                    <input id="make-nft-input__domain" type="text"  autocomplete="off"/><br/>
+
+		    <label for="make-nft-input__token-id">NFT Token ID</label><br/>
+                    <input id="make-nft-input__token-id" type="text" readonly /><br/>
+		    
+                    <label for="make-nft-input__mint-fee">Mint fee ETH</label><br/>
+                    <input id="make-nft-input__mint-fee" type="text" readonly /><br/>
+		    
+                    <label for="make-nft-input__gas-price">Gas price Gwei</label><br/>
+                    <input id="make-nft-input__gas-price" type="text" readonly /><br/>
+		    
+                    <label for="make-nft-input__estimate-gas">Estimate gas</label><br/>
+                    <input id="make-nft-input__estimate-gas" type="text" readonly /><br/>
+		    
+                    <label for="make-nft-input__total-price">Total price ETH</label><br/>
+                    <input id="make-nft-input__total-price" type="text" readonly /><br/>
+		    
+                    <button id="make-nft-input__mint-button" disabled>Make</button>
+		</form>
+		<hr/>
+	    </section>
+            <section id="tab-user-send-eth" class="tab">
+		<h1>Send Eth</h1>
+		<form action="">
+                    <label for="send-eth__amount">Amount</label>
+                    <input id="send-eth__amount" />
+		    <label for="send-eth__address">Address</label>
+                    <input id="send-eth__address" type="text" />
+		    <label for="send-eth__domain">Domain</label>
+                    <input id="send-eth__domain" type="text" placeholder="&mdash;" />
+                    <button id="send-eth__send-button" disabled>Send</button>
+		</form>
+		<hr/>
+            </section>
+            <section id="tab-user-nft-actions" class="tab">
+		<h1>User NFT Actions</h1>
+		<h2 id="user-nft-actions__token-id"    ></h2>
+		<h2 id="user-nft-actions__token-domain"></h2>
+		<button href="#" id="nft-actions-button__properties"        >Properties</button><br/>
+		<button href="#" id="nft-actions-button__files"             >Files</button><br/>
+		<button href="#" id="nft-actions-button__approve"           >Approve</button><br/>
+		<button href="#" id="nft-actions-button__transfer"          >Transfer</button><br/>
+		<button href="#" id="nft-actions-button__put-on-the-market" >Put on the market</button><br/>
+		<button href="#" id="nft-actions-button__finalize"          >Finalize</button>
+		<hr/>
+            </section>
+            <section id="tab-user-nft-properties" class="tab">
+		<h1>User NFT Properties</h1>
+		<h2 id="user-nft-properties__token-id"></h2>
+		<h2 id="user-nft-properties__token-domain"></h2>
+		<label for="user-nft-properties__token-name">Token name</label>
+		<input  id="user-nft-properties__token-name" type="text" value=""/>
+		<p class="user-nft-properties__form-field-description">Identifies the asset to which this token represents</p>
+
+		<label for="user-nft-properties__token-description">Token brief description</label>
+		<input id="user-nft-properties__token-description" type="text" value=""/>
+		<p class="user-nft-properties__form-field-description">Describes the asset to which this token represents</p>
+
+		<label for="user-nft-properties__token-type">Token type</label>
+		<select id="user-nft-properties__token-type" id="" name="">
+                    <option value="www" >WWW</option>
+                    <option value="dpwa">DPWA</option>
+                    <option value="art" >ART</option>
+                    <option value="apk" >APK</option>
+		</select>
+		<p class="user-nft-properties__form-field-description">Describes the type of the asset to which this token represents</p>
+		
+		<label for="user-nft-properties__token-image">URI</label>
+		<input id="user-nft-properties__token-image" type="text" />
+		<p class="user-nft-properties__form-field-description">A URI pointing to a resource representing the asset to which this token represents</p>
+
+		<label for="user-nft-properties__preview_1">URI for preview image/video #1</label>
+		<input type="text" id="user-nft-properties__preview_1">
+		<br>
+		<label for="user-nft-properties__preview_2">URI for preview image/video #2</label>
+		<input type="text" id="user-nft-properties__preview_2">
+		<br>
+		<label for="user-nft-properties__preview_3">URI for preview image/video #3</label>
+		<input type="text" id="user-nft-properties__preview_3">
+		<br>
+		<label for="user-nft-properties__preview_4">URI for preview image/video #4</label>
+		<input type="text" id="user-nft-properties__preview_4">
+		<br>
+		<label for="user-nft-properties__preview_5">URI for preview image/video #5</label>
+		<input type="text" id="user-nft-properties__preview_5">
+		<br>
+		<label for="user-nft-properties__preview_6">URI for preview image/video #6</label>
+		<input type="text" id="user-nft-properties__preview_6">
+		<br>
+		<label for="user-nft-properties__preview_7">URI for preview image/video #7</label>
+		<input type="text" id="user-nft-properties__preview_7">
+		<br>
+		<label for="user-nft-properties__preview_8">URI for preview image/video #8</label>
+		<input type="text" id="user-nft-properties__preview_8">
+		<br>
+		<label for="user-nft-properties__preview_9">URI for preview image/video #9</label>
+		<input type="text" id="user-nft-properties__preview_9">
+		<br>
+		<label for="user-nft-properties__preview_10">URI for preview image/video #10</label>
+		<input type="text" id="user-nft-properties__preview_0">
+		<br>
+		
+		<label for="user-nft-properties__detailed-description">Detailed description</label>
+		<textarea id="user-nft-properties__detailed-description" ></textarea>
+		<p class="user-nft-properties__form-field-description">The detailed desciption of the asset to which this token represents</p>
+
+		<button id="user-nft-properties__button_upload">Upload NFT metadata</button>
+
+		<hr/>
+            </section>
+            <section id="tab-user-link-nft-metadata" class="tab">
+		<h1>Link NFT metadata</h1>
+		<button id="user-link-nft-metadata__button_link">Link NFT metadata</button>
+            </section>
+	    <section id="tab-user-nft-upload-meta" class="tab">
+		<h1>Link uploaded NFT properties</h1>
+            </section>
+            <section id="tab-user-approve" class="tab">
+		<h1>Approve</h1>
+		<h2 id="user-approve__token-id"    ></h2>
+		<h2 id="user-approve__token-domain"></h2>
+		<label for="user-approve__input">Approved address</label>
+		<input id="user-approve__input" name="" type="text" placeholder="none" /><br />
+		<button id="user-approve-button__approve">Approve</button>
+		<button id="user-approve-button__reset"  >Reset</button>
+		<hr/>
+            </section>
+            <section id="tab-user-finalize" class="tab">
+		<h1>Finalize token</h1>
+		<!-- TODO Add address and domain -->
+		<h2>You are about to finalize your NFT token.  After that you will not be able to upload any files anymore. Are you sure?</h2>
+		<button id="user-finalize__confirm">Confirm</button>
+		<button id="user-finalize__cancel" >Cancel</button>
+		<hr/>
+            </section>
+            <section id="tab-user-transfer" class="tab">
+		<h1>Transfer token</h1>
+		<label for="user-transfer__address">Address:</label>
+		<input id="user-transfer__address" name="" placeholder="Address" />
+		<button id="user-transfer__button-transfer">Transfer</button>
+            </section>
+	    <!-- ================================================================================ -->
+            <section id="tab-files" class="tab">
+		<h1>Files</h1>
+		<button id="files__upload">Upload</button>
+		<button id="files__unlink">Unlink</button>
+		<hr/>
+            </section>
+	    <section id="tab-upload-wizard-1" class="tab">
+		<h1>Step 1. Fill the form.</h1>
+		<!-- <form> -->
+		<label>File:</label><input type="file" id="file" /><br/>
+		<label>Path: </label><input type="text" id="uripath" required><br />
+		<button id="chop-button">Chop</button>
+		<!-- </form> -->
+		<hr/>
+	    </section>
+	    <section id="tab-upload-wizard-2" class="tab">
+		<h1 id="header__step-2">Step 2.	Upload file chunks</h1>  
+	    </section>
+	    <section id="tab-upload-wizard-3" class="tab">
+		<h1 id="header__step-3">Step 3. Link file</h1>  
+		<button id="upload-wizard__link-button">Link</button>
+	    </section>
+	    <section id="tab-upload-wizard-4" class="tab">
+		<h1>Step 4.	Congratulations</h1>  
+		<p id="message-ok"></p>
+	    </section>
+            <section id="tab-unlink" class="tab">
+		<h1>Unlink</h1>
+		<label for="unlink__input">Path to the file to unlink</label>
+		<input id="unlink__input" name="" type="text" />
+		<button id="unlink__button">Unlik</button>
+		<hr/>
+            </section>
+	    <!-- ================================================================================ -->
+	    <section id="tab-message-success" class="tab">
+		<h1 id="message-success__header"></h1>
+		<p id="message-success__message"></p>
+		<hr/>
+            </section>
+            <section id="tab-message-error" class="tab">
+		<h1 id="message-error__header"></h1>
+		<p id="message-error__message"></p>
+		<hr/>
+            </section>
+	</main>
+	<script defer src="dapplink-upload.js"></script>
+	<script defer src="dapplink-abi.js"></script>
+	<script src="dapplink.js"></script>
+    </body>
+</html>
