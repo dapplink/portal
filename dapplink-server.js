@@ -742,8 +742,8 @@ const DAPPLINK = {
 ],
     bytecode: {}
 }
-
-
+const NFT = {}
+const HOST = 'localhost'
 let SHA1Generator = {
 
     hex_chr: "0123456789abcdef",
@@ -855,11 +855,12 @@ const cors		= require( "cors"		);
 const multer		= require( "multer"		);
 const vhost		= require( "vhost"		);
 
+const axios = require('axios')
 /*
 TODO 
 const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/dappweb.io/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/dappweb.io/privkey.pem')
+    cert: fs.readFileSync('/etc/letsencrypt/live/dapplink.io/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/dapplink.io/privkey.pem')
 };
 */
 
@@ -953,3 +954,50 @@ async function vhostHandler( req, res, next ) {
 	    }
 	})
 }
+
+async function spider() {
+    const NFTs = {}
+    let token_id, domain_name, owner, json_metadata_uri, metadata_object
+    const total_supply = await contract.methods.totalSupply().call()
+
+    for (let i = 1; i <= total_supply; i++) {
+	console.log( 'Token: ' + i );
+	try {
+	    token_id = await contract.methods.tokenByIndex( i ).call()
+	    domain_name = await contract.methods.domains( token_id ).call()
+	    owner = await contract.methods.ownerOf( token_id ).call()
+	    console.table({id: token_id, domain:domain_name})
+	} catch (e) {
+	    continue
+	}
+	NFTs[ token_id ] = {}
+	NFTs[ token_id ].domain_name = domain_name
+	NFTs[ token_id ].owner = owner
+	try {
+	    const response_object = await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} )
+	    metadata_object = response_object.data
+	    if( typeof metadata_object.properties.name.description		!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.properties.description.description	!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.token_type			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.properties.image.description		!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_1			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_2			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_3			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_4			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_5			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_6			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_7			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_8			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_9			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.preview_0			!== 'string' ) throw 'structure error'
+	    if( typeof metadata_object.dapplink.detailed_description		!== 'string' ) throw 'structure error'
+	} catch (e) {
+	    if ( i == 13 ) 
+		console.log( e )
+	    NFTs[ token_id ].metadata = null
+	    continue
+	}
+	NFTs[ token_id ].metadata = metadata_object
+    }
+}
+

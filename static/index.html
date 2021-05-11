@@ -12,12 +12,10 @@
 	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>  -->
 	<style>
-	 * { box-sizing: inherit; margin: inherit; padding: inherit;
-	 }
+	 * { box-sizing: inherit; }
 	 :root {
 	     --white: #e4eafa;
 	 }
-	 li {font-family: monospace;}
 	 html {
 	     font-size: 67.5%;
 	     font-size: 10px;
@@ -36,7 +34,7 @@
 	     grid-template-columns: 100%;
 	 }
 	 /* main menu */
-	 header {
+	 .top-menu__container {
 	     display: flex;
 	     justify-content: space-between;
 	     align-items: center;
@@ -72,11 +70,8 @@
 	     background-color: #6cc8f1;
 	     cursor: pointer;
 	 }
-	 #main-menu__www {
+	 .main-menu__link--active {
 	     background-color: #4397bc;
-	 }
-	 .main-menu__icon:not(.home-icon) {
-	     padding-left: 1.5rem;
 	 }
 	 /* user menu */
 	 #user-menu {
@@ -123,29 +118,204 @@
 	 }
 	 /* ---------------------------------------- */
 	 main {
-	     /* background-color: yellow; */
-	     /* background-image: radial-gradient(circle, 50%, at 50% 50%, #161719, #3f4248); */
-	     /* background-image: radial-gradient( circle, #161719, #3f4248 500%); */
 	     background-image: radial-gradient(circle, #161719 20%, #3f4248 900%);
 	     color: #e2e2e2;
 	     grid-area: 2/1/3/2;
 	 }
+	 .tab {
+	     width: 100rem;
+	     margin: 0 auto;
+	     margin-top: 2rem;
+	 }
+	 /* tab-header */
+	 .tab-header__title {
+	     font-size: 5rem;
+	     font-weight: normal;
+	 }
+	 .tab-header__token-properties {
+	     margin: 1.8rem 0;
+	 }
+	 .tab-header__domain, .tab-header__token-id {
+	     font-size: 1.4rem;
+	     font-size: 2rem;
+	     text-transform: uppercase;
+	 }
+	 .tab-header__domain {
+	     padding-right: 2rem;
+	     background-color: #38566e;
+	 }
+	 .tab-header__token-id {
+	     font-family: monospace;
+	     color: #d3b66a;
+	 }
+	 p {
+	     font-size: 1.5rem;
+	 }
+	 /* form elements */
+	 .button {
+	     font-size: 2rem;
+	     padding: 1rem;
+	     background-color: #284160;
+	     color: var(--white);
+	     text-transform: uppercase;
+	     border: 1px solid var(--white);
+	     width: 25rem;
+	     margin: .5rem 0;
+	     margin-right: .5rem;
+	 }
+	 .button:disabled {
+	     background-color: #121d2c;
+	     color: gray;
+	     border: 1px solid gray;
+	 }
+	 .button:hover {
+	     background-color: #34547c;
+	 }
+
+	 label, input, textarea, select {
+	     display: block;
+	     width: 70rem;
+	 }
+	 label {
+	     margin-top: 1.5rem;
+	     font-size: 1.3rem;
+	 }
+	 input, select, textarea {
+	     height: 4rem;
+	     border: none;
+	     background-color: #798791;
+	     font-size: 2rem;
+	     font-size: 1.5rem;
+	     padding: .5rem;
+	     padding-left: 1rem;
+	     margin: .2rem 0;
+	     font-weight: bold;
+	 }
+	 input:read-only {
+	     background-color: #3a3d3f;
+	     outline: none;
+	     font-family: monospace;
+	     font-weight: normal;
+	 }
+	 textarea {
+	     height: 8rem;
+	 }
+	 /* NFT LIST */
+	 #tab-user-nft__ul {
+	     margin: 0;
+	     padding: 0;
+	     list-style: none;
+	 }
+	 .user-nft__token-container {
+	     display: flex;
+	     width: 70rem;
+	     height: 5rem;
+	     margin: .5rem 0;
+	     font-size: 1.4rem;
+	 }
+	 .user-nft__token-container:hover {
+	     cursor: pointer;
+	     background-color: rgba(43,44,48,.7);
+	 }
+	 .user-nft__token-container:hover .user-nft__token-index {
+	     background-color: #e7c365;
+	 }
+	 .user-nft__token-index {
+	     display: flex;
+	     justify-content: center;
+	     align-items: center;
+	     font-size: 3rem;
+	     font-weight: bold;
+	     width: 5rem;
+	     color: #253535;
+	     background-color: #79889d;
+	 }
+	 .user-nft__token-properties {
+	     margin-left: 1rem;
+	 }
+	 .user-nft__token-domain {
+	     display: inline;
+	     text-transform: uppercase;
+	     font-size: 2.2rem;
+	 }
+	 .user-nft_token-id {
+	     font-family: monospace;
+	     color: #d3b66a;
+	 }
+	 /* app card */
+	 .dapplist__container {
+	     display: flex;
+	     width: 70rem;
+	     margin: 3rem 0;
+	     font-size: 1.4rem;
+	     cursor: pointer;
+	 }
+	 .dapplist__container:hover .dapplist__properties {
+	     background-color: rgba(43,44,48,.7);
+	     display: block;
+	 }
+	 .dapplist__icon {
+	     height: 5rem;
+	     width: 5rem;
+	     object-fit: cover;
+	 }
+	 .dapplist__properties {
+	     margin-left: 1rem;
+	 }
+	 .dapplist__name {
+	     font-size: 2.2rem;
+	     font-weight: bold;
+	 }
+	 .dapplist__brief_description {
+
+	 }
+	 /* dapp page */
+	 .dapp__header {
+	     display: flex;
+	     height: 15rem;
+	     /* background-color: gray; */
+	     margin-top: 1.8rem;
+	 }
+	 .dapp__icon {
+	     width: 15rem;
+	     height: 15rem;
+	     background-size: cover;
+	 }
+	 .dapp__properties {
+	     margin-left: 4rem;
+	     display: flex;
+	     flex-direction: column;
+	     justify-content: space-between;
+	 }
+	 .dapp__brief-description {
+	     font-size: 2rem;
+	 }
+	 .dapp-gallery {
+	     margin-top: 1.8rem;
+	     display: grid;
+	     grid-template-columns: repeat(5, 15rem);
+	     grid-template-rows: repeat(2, 30rem);
+	     grid-gap: 2rem;
+	     gap-color: transparent;
+	 }
+	 .dapp-gallery__item {
+	     background-color: red;
+	 }
+	 .dapp_description {}
 	</style>
 	<title>Dapplink</title>
-	<style>
-	</style>
     </head>
     <body>
 	<header class="top-menu__container">
 	    <section id="main-menu" class="main-menu">
-		<div class="main-menu__link" id="main-menu__home"     ><i class="material-icons main-menu__icon home-icon">home</i></div>
-		<div class="main-menu__link" id="main-menu__help"     ><i class="material-icons main-menu__icon">help</i></div>
-		<div class="main-menu__link" id="main-menu__download" ><i class="material-icons main-menu__icon">file_download</i></div>
-		<div class="main-menu__link" id="main-menu__shop"     ><i class="material-icons main-menu__icon">shopping_cart</i></div>
-		<div class="main-menu__link" id="main-menu__www"      >WWW</div>
-		<div class="main-menu__link" id="main-menu__dpwa"     >DPWA</div>
-		<div class="main-menu__link" id="main-menu__art"      >ART</div>
-		<div class="main-menu__link" id="main-menu__apk"      >APK</div>
+		<div class="main-menu__link" id="main-menu__home"      ><i class="material-icons main-menu__icon">home</i></div>
+		<div class="main-menu__link" id="main-menu__help"      ><i class="material-icons main-menu__icon">help</i></div>
+		<div class="main-menu__link" id="main-menu__downloads" ><i class="material-icons main-menu__icon">file_download</i></div>
+		<div class="main-menu__link" id="main-menu__shop"      ><i class="material-icons main-menu__icon">shopping_cart</i></div>
+		<div class="main-menu__link" id="main-menu__www"       >WWW</div>
+		<div class="main-menu__link" id="main-menu__dpwa"      >DPWA</div>
+		<div class="main-menu__link" id="main-menu__art"       >ART</div>
+		<div class="main-menu__link" id="main-menu__apk"       >APK</div>
 	    </section>
 	    <section id="user-menu">
 		<div id="user-account-menu">
@@ -159,153 +329,271 @@
 	</header>
 	<main>
 	    <section id="tab-home" class="tab">
-		<h1>Home</h1>
-                <div style="background-color: red; width: 10rem; height: 10rem;"></div>
-		<div class="jumbo">
-		    <p>
-			Dapplink technology is a way to build and run websites, applications
-			and services directly on the blockchain without having to have and
-			maintain servers, databases and storage systems.  Your applications and
-			data will be kept and available forever without any additional
-			costs.  Anyone may get access to your digital products using a web
-			browser or via http request.  One may consider dapplink as extension
-			of the World Wide Web to the blockchain area.
-		    </p>
-		    <p>
-			All resources in the Dapplink infrastructure are
-			represented as NFT, so any kind of your work
-			(website, application, art) become your own
-			NFT-token at the moment of its creation.  You may
-			publish your works in the dapplink destribution
-			service where users may see them.  Also dapplink
-			provide full-featured economical ecosystem where
-			users, developers and creators can mutually
-			beneficial cooperate with each other.
-		    </p>
-		</div>
-		<hr/>
+		<div class="tab-header__title">Home</div>
+                <p>
+		    Dapplink technology is a way to build and run websites, applications
+		    and services directly on the blockchain without having to have and
+		    maintain servers, databases and storage systems.  Your applications and
+		    data will be kept and available forever without any additional
+		    costs.  Anyone may get access to your digital products using a web
+		    browser or via http request.  One may consider dapplink as extension
+		    of the World Wide Web to the blockchain area.
+		</p>
+		<p>
+		    All resources in the Dapplink infrastructure are
+		    represented as NFT, so any kind of your work
+		    (website, application, art) become your own
+		    NFT-token at the moment of its creation.  You may
+		    publish your works in the dapplink destribution
+		    service where users may see them.  Also dapplink
+		    provide full-featured economical ecosystem where
+		    users, developers and creators can mutually
+		    beneficial cooperate with each other.
+		</p>
 	    </section>
             <section id="tab-help" class="tab">
-		<h1>Documentation</h1>
+		<div class="tab-header__title">Documentation</div>
 		<!-- temporarily no content -->
-		<hr/>
             </section>
 	    <section id="tab-downloads" class="tab">
-		<h1>Downloads</h1>
+		<div class="tab-header__title">Downloads</div>
 		<!-- temporarily no content -->
-		<hr/>
 	    </section>
             <section id="tab-shop" class="tab">
-		<h1>Store</h1>
-		<ul>
-                    <li>Name
-			<ul>
-			    <li>Icon</li>
-			    <li>Description</li>
-			    <li>Type</li>
-			    <li>Price</li>
-                            <li>Details</li>
-			</ul>
-		    </li>
-                    <li><i>Some ART</i></li>
-                    <li><i>Some ART</i></li>
-                    <li><i>Some WWW</i></li>
-		</ul>
-		<hr/>
+		<!-- <div class="tab-header__title">Store</div> -->
+		<div class="tab-header__title">Telegram</div>
+                    <div class="dapp__header">
+                        <div class="dapp__icon" style="background-image: url('https://f-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png')"></div>
+                        <div class="dapp__properties">
+                            <div class="dapp__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+			    <button class="button">Install</button>
+			</div>
+		    </div>
+		    <div class="dapp-gallery">
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--1"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--2"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--3"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--4"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--5"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--6"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--7"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--8"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--9"></div>
+                        <div class="dapp-gallery__item" class="dapp-gallery__item--0"></div>
+		    </div>
+                    <div class="dapp__description" id="dapp__description">
+			<p>
+			Telegram FOSS<br/>
+			Telegram is a messaging app with a focus on speed and security.<br/>
+			New in version 7.6.0<br/>
+			* Start voice chats in channels, with no limits on the number of listeners<br/>
+			* Record voice chats<br/>
+			* See user bios in the list of participants<br/>
+			* Raise a hand to show admins you want to speak
+			* Create invite links for listeners or speakers
+			* Join as a channel to hide your personal account
+			* Customize the left swipe action on chats: Pin, Read, Archive, Mute or Delete
+			* and More
+			Client for the Telegram messaging platform.
+
+			Chat with friends, start group chats and share all kinds of content. All of your messages and conversations are stored in Telegram's cloud.
+
+			The messaging platform is aimed at mobile devices, but desktop and web clients exist as well.
+
+			Several proprietary parts were removed from the original Telegram client, including Google Play Services for the location services, HockeySDK for self-updates and push notifications through Google Cloud Messaging. Location sharing functionality is restored using OpenStreetMap.
+
+			Anti-Feature: Non-Free Network, since the servers run proprietary software.
+
+			The official source code of the app contains binary blobs, so this tracks a fork which builds those from source. Hence, versions might become available with a certain lag.
+
+			License:GNU General Public License v2.0 or later Website Issue Tracker Translation Source Code Changelog Build Metadata Technical info
+
+			https://telegram.org/
+			https://github.com/Telegram-FOSS-Team/Telegram-FOSS
+
+
+			Permissions
+			access approximate location only in the foreground
+			This app can get your approximate location from location services while the app is in use. Location services for your device must be turned on for the app to get location.
+			access precise location only in the foreground
+			This app can get your precise location from location services while the app is in use. Location services for your device must be turned on for the app to get location. This may increase battery usage.
+			directly call phone numbers
+			Allows the app to call phone numbers without your intervention. This may result in unexpected charges or calls. Note that this doesn't allow the app to call emergency numbers. Malicious apps may cost you money by making calls without your confirmation.
+			run foreground service
+			Allows the app to make use of foreground services.
+			read call log
+			This app can read your call history.
+			have full network access
+			Allows the app to create network sockets and use custom network protocols. The browser and other applications provide means to send data to the internet, so this permission is not required to send data to the internet.
+			record audio
+			This app can record audio using the microphone at any time.
+			change your audio settings
+			Allows the app to modify global audio settings such as volume and which speaker is used for output.
+			view network connections
+			Allows the app to view information about network connections such as which networks exist and are connected.
+			view Wi-Fi connections
+			Allows the app to view information about Wi-Fi networking, such as whether Wi-Fi is enabled and name of connected Wi-Fi devices.
+			prevent phone from sleeping
+			Allows the app to prevent the phone from going to sleep.
+			read the contents of your shared storage
+			Allows the app to read the contents of your shared storage.
+			find accounts on the device
+			Allows the app to get the list of accounts known by the phone. This may include any accounts created by applications you have installed.
+			read your contacts
+			Allows the app to read data about your contacts stored on your phone. Apps will also have access to the accounts on your phone that have created contacts. This may include accounts created by apps you have installed. This permission allows apps to save your contact data, and malicious apps may share contact data without your knowledge.
+			modify your contacts
+			Allows the app to modify the data about your contacts stored on your phone. This permission allows apps to delete contact data.
+			toggle sync on and off
+			Allows an app to modify the sync settings for an account. For example, this can be used to enable sync of the People app with an account.
+			read sync settings
+			Allows the app to read the sync settings for an account. For example, this can determine whether the People app is synced with an account.
+			control vibration
+			Allows the app to control the vibrator.
+			This app can appear on top of other apps
+			This app can appear on top of other apps or other parts of the screen. This may interfere with normal app usage and change the way that other apps appear.
+			read phone status and identity
+			Allows the app to access the phone features of the device. This permission allows the app to determine the phone number and device IDs, whether a call is active, and the remote number connected by a call.
+			run at startup
+			Allows the app to have itself started as soon as the system has finished booting. This can make it take longer to start the phone and allow the app to slow down the overall phone by always running.
+			use fingerprint hardware
+			Allows the app to use fingerprint hardware for authentication
+			use biometric hardware
+			Allows the app to use biometric hardware for authentication
+			android.permission.INSTALL_SHORTCUT
+			install shortcuts
+			Allows an application to add Homescreen shortcuts without user intervention.
+			uninstall shortcuts
+			Allows the application to remove Homescreen shortcuts without user intervention.
+			take pictures and videos
+			This app can take pictures and record videos using the camera at any time.
+			pair with Bluetooth devices
+			Allows the app to view the configuration of the Bluetooth on the phone, and to make and accept connections with paired devices.
+			route calls through the system
+			Allows the app to route its calls through the system in order to improve the calling experience.
+			android.permission.USE_FULL_SCREEN_INTENT
+			request install packages
+			Allows an application to request installation of packages.
+			com.sec.android.provider.badge.permission.READ
+			com.sec.android.provider.badge.permission.WRITE
+			com.htc.launcher.permission.READ_SETTINGS
+			com.htc.launcher.permission.UPDATE_SHORTCUT
+			com.sonyericsson.home.permission.BROADCAST_BADGE
+			com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
+			com.anddoes.launcher.permission.UPDATE_COUNT
+			com.majeur.launcher.permission.UPDATE_BADGE
+			com.huawei.android.launcher.permission.CHANGE_BADGE
+			com.huawei.android.launcher.permission.READ_SETTINGS
+			com.huawei.android.launcher.permission.WRITE_SETTINGS
+			android.permission.READ_APP_BADGE
+			com.oppo.launcher.permission.READ_SETTINGS
+			com.oppo.launcher.permission.WRITE_SETTINGS
+			me.everything.badger.permission.BADGE_COUNT_READ
+			me.everything.badger.permission.BADGE_COUNT_WRITE
+			request install packages
+			Allows an application to request installation of packages.
+			modify or delete the contents of your shared storage
+			Allows the app to write the contents of your shared storage.
+			android.permission.ACCESS_BACKGROUND_LOCATION
+			</p>
+		    </div>
             </section>
             <section id="tab-www" class="tab">
-		<h1>WWW</h1>
-		<hr/>
+		<div class="tab-header__title">WWW</div>
+		<div class="dapplist__container">
+		    <img src="https://f-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png" class="dapplist__icon" />
+		    <div class="dapplist__properties">
+			<div class="dapplist__name">Telegram</div>
+			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		    </div>
+		</div>
+		<div class="dapplist__container">
+		    <div style='background-color: black; background-image: url("https://ff-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png"); background-size:cover;' class="dapplist__icon"></div>
+		    <div class="dapplist__properties">
+			<div class="dapplist__name">Telegram</div>
+			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		    </div>
+		</div>
+		<div class="dapplist__container">
+		    <img src="https://www.w3schools.com/html/mov_bbb.mp4" onerror="this.onerror=null;this.src='https://placeimg.com/300/300/animals';" class="dapplist__icon" />
+		    <div class="dapplist__properties">
+			<div class="dapplist__name">Telegram</div>
+			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		    </div>
+		</div>
             </section>
             <section id="tab-dpwa" class="tab">
-		<h1>DPWA</h1>
-		<hr/>
+		<div class="tab-header__title">DPWA</div>
             </section>
             <section id="tab-art" class="tab">
-		<h1>ART</h1>
-		<hr/>
+		<div class="tab-header__title">ART</div>
             </section>
             <section id="tab-apk" class="tab">
-		<h1>APK</h1>
-		<ul>
-                    <li>Name</li>
-                    <li>Descripton</li>
-                    <li>Address</li>
-                    <li><button>Details</button></li>
-		    <li><button>Install</button></li>
-		</ul>
-		<hr/>
+		<div class="tab-header__title">APK</div>
             </section>
             <section id="tab-user-nft" class="tab">
-		<h1>User NFT</h1>
+		<div class="tab-header__title">User NFT</div>
 		<ul id="tab-user-nft__ul">
-
+		    
 		</ul>
-		<button id="user-nft-make-button">Make</button>
-		<hr/>
+		<button class ="button" id="user-nft-make-button">Make</button>
             </section>
 	    <section id="tab-user-make-nft" class="tab">
-		<h1>Make NFT</h1>
-		<form>
-                    <label for="make-nft-input__domain">NFT Domain name:</label><br/>
-                    <input id="make-nft-input__domain" type="text"  autocomplete="off"/><br/>
+		<div class="tab-header__title">Make NFT</div>
 
-		    <label for="make-nft-input__token-id">NFT Token ID</label><br/>
-                    <input id="make-nft-input__token-id" type="text" readonly /><br/>
+                    <label for="make-nft-input__domain">NFT Domain name</label>
+                    <input id="make-nft-input__domain" type="text"  autocomplete="off"/>
+
+		    <label for="make-nft-input__token-id">NFT Token ID</label>
+                    <input id="make-nft-input__token-id" type="text" readonly />
 		    
-                    <label for="make-nft-input__mint-fee">Mint fee ETH</label><br/>
-                    <input id="make-nft-input__mint-fee" type="text" readonly /><br/>
+                    <label for="make-nft-input__mint-fee">Mint fee ETH</label>
+                    <input id="make-nft-input__mint-fee" type="text" readonly />
 		    
-                    <label for="make-nft-input__gas-price">Gas price Gwei</label><br/>
-                    <input id="make-nft-input__gas-price" type="text" readonly /><br/>
+                    <label for="make-nft-input__gas-price">Gas price Gwei</label>
+                    <input id="make-nft-input__gas-price" type="text" readonly />
 		    
-                    <label for="make-nft-input__estimate-gas">Estimate gas</label><br/>
-                    <input id="make-nft-input__estimate-gas" type="text" readonly /><br/>
+                    <label for="make-nft-input__estimate-gas">Estimate gas</label>
+                    <input id="make-nft-input__estimate-gas" type="text" readonly />
 		    
-                    <label for="make-nft-input__total-price">Total price ETH</label><br/>
-                    <input id="make-nft-input__total-price" type="text" readonly /><br/>
+                    <label for="make-nft-input__total-price">Total price ETH</label>
+                    <input id="make-nft-input__total-price" type="text" readonly />
 		    
-                    <button id="make-nft-input__mint-button" disabled>Make</button>
-		</form>
-		<hr/>
+                    <button class ="button" id="make-nft-input__mint-button" disabled>Make</button>
+
 	    </section>
             <section id="tab-user-send-eth" class="tab">
-		<h1>Send Eth</h1>
-		<form action="">
+		<div class="tab-header__title">Send Eth</div>
                     <label for="send-eth__amount">Amount</label>
                     <input id="send-eth__amount" />
 		    <label for="send-eth__address">Address</label>
                     <input id="send-eth__address" type="text" />
 		    <label for="send-eth__domain">Domain</label>
                     <input id="send-eth__domain" type="text" placeholder="&mdash;" />
-                    <button id="send-eth__send-button" disabled>Send</button>
-		</form>
-		<hr/>
+                    <button class="button" id="send-eth__send-button" disabled>Send</button>
             </section>
             <section id="tab-user-nft-actions" class="tab">
-		<h1>User NFT Actions</h1>
-		<h2 id="user-nft-actions__token-id"    ></h2>
-		<h2 id="user-nft-actions__token-domain"></h2>
-		<button href="#" id="nft-actions-button__properties"        >Properties</button><br/>
-		<button href="#" id="nft-actions-button__files"             >Files</button><br/>
-		<button href="#" id="nft-actions-button__approve"           >Approve</button><br/>
-		<button href="#" id="nft-actions-button__transfer"          >Transfer</button><br/>
-		<button href="#" id="nft-actions-button__put-on-the-market" >Put on the market</button><br/>
-		<button href="#" id="nft-actions-button__finalize"          >Finalize</button>
-		<hr/>
+		<div class="tab-header__title">User NFT Actions</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-actions__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-actions__token-id" class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="nft-actions-button__properties"        >Properties</button><br/>
+		<button class="button" id="nft-actions-button__files"             >Files</button><br/>
+		<button class="button" id="nft-actions-button__approve"           >Approve</button><br/>
+		<button class="button" id="nft-actions-button__transfer"          >Transfer</button><br/>
+		<button class="button" id="nft-actions-button__put-on-the-market" >Put on the market</button><br/>
+		<button class="button" id="nft-actions-button__finalize"          >Finalize</button>
             </section>
             <section id="tab-user-nft-properties" class="tab">
-		<h1>User NFT Properties</h1>
-		<h2 id="user-nft-properties__token-id"></h2>
-		<h2 id="user-nft-properties__token-domain"></h2>
+		<div class="tab-header__title">User NFT Properties</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
 		<label for="user-nft-properties__token-name">Token name</label>
 		<input  id="user-nft-properties__token-name" type="text" value=""/>
-		<p class="user-nft-properties__form-field-description">Identifies the asset to which this token represents</p>
-
 		<label for="user-nft-properties__token-description">Token brief description</label>
 		<input id="user-nft-properties__token-description" type="text" value=""/>
-		<p class="user-nft-properties__form-field-description">Describes the asset to which this token represents</p>
-
 		<label for="user-nft-properties__token-type">Token type</label>
 		<select id="user-nft-properties__token-type" id="" name="">
                     <option value="www" >WWW</option>
@@ -313,126 +601,136 @@
                     <option value="art" >ART</option>
                     <option value="apk" >APK</option>
 		</select>
-		<p class="user-nft-properties__form-field-description">Describes the type of the asset to which this token represents</p>
-		
 		<label for="user-nft-properties__token-image">URI</label>
 		<input id="user-nft-properties__token-image" type="text" />
-		<p class="user-nft-properties__form-field-description">A URI pointing to a resource representing the asset to which this token represents</p>
-
 		<label for="user-nft-properties__preview_1">URI for preview image/video #1</label>
 		<input type="text" id="user-nft-properties__preview_1">
-		<br>
 		<label for="user-nft-properties__preview_2">URI for preview image/video #2</label>
 		<input type="text" id="user-nft-properties__preview_2">
-		<br>
 		<label for="user-nft-properties__preview_3">URI for preview image/video #3</label>
 		<input type="text" id="user-nft-properties__preview_3">
-		<br>
 		<label for="user-nft-properties__preview_4">URI for preview image/video #4</label>
 		<input type="text" id="user-nft-properties__preview_4">
-		<br>
 		<label for="user-nft-properties__preview_5">URI for preview image/video #5</label>
 		<input type="text" id="user-nft-properties__preview_5">
-		<br>
 		<label for="user-nft-properties__preview_6">URI for preview image/video #6</label>
 		<input type="text" id="user-nft-properties__preview_6">
-		<br>
 		<label for="user-nft-properties__preview_7">URI for preview image/video #7</label>
 		<input type="text" id="user-nft-properties__preview_7">
-		<br>
 		<label for="user-nft-properties__preview_8">URI for preview image/video #8</label>
 		<input type="text" id="user-nft-properties__preview_8">
-		<br>
 		<label for="user-nft-properties__preview_9">URI for preview image/video #9</label>
 		<input type="text" id="user-nft-properties__preview_9">
-		<br>
 		<label for="user-nft-properties__preview_10">URI for preview image/video #10</label>
 		<input type="text" id="user-nft-properties__preview_0">
-		<br>
-		
 		<label for="user-nft-properties__detailed-description">Detailed description</label>
 		<textarea id="user-nft-properties__detailed-description" ></textarea>
-		<p class="user-nft-properties__form-field-description">The detailed desciption of the asset to which this token represents</p>
-
-		<button id="user-nft-properties__button_upload">Upload NFT metadata</button>
-
-		<hr/>
+		<button class="button" id="user-nft-properties__button_upload">Upload NFT metadata</button>
             </section>
             <section id="tab-user-link-nft-metadata" class="tab">
-		<h1>Link NFT metadata</h1>
-		<button id="user-link-nft-metadata__button_link">Link NFT metadata</button>
+		<div class="tab-header__title">Link NFT metadata</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="user-link-nft-metadata__button_link">Link NFT metadata</button>
             </section>
 	    <section id="tab-user-nft-upload-meta" class="tab">
-		<h1>Link uploaded NFT properties</h1>
+		<div class="tab-header__title">Link uploaded NFT properties</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
             </section>
             <section id="tab-user-approve" class="tab">
-		<h1>Approve</h1>
-		<h2 id="user-approve__token-id"    ></h2>
-		<h2 id="user-approve__token-domain"></h2>
+		<div class="tab-header__title">Approve</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-approve__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-approve__token-id" class="tab-header__token-id"></div>
+		</div>
 		<label for="user-approve__input">Approved address</label>
 		<input id="user-approve__input" name="" type="text" placeholder="none" /><br />
-		<button id="user-approve-button__approve">Approve</button>
-		<button id="user-approve-button__reset"  >Reset</button>
+		<button class="button" id="user-approve-button__approve">Approve</button>
+		<button class="button" id="user-approve-button__reset"  >Reset</button>
 		<hr/>
             </section>
             <section id="tab-user-finalize" class="tab">
-		<h1>Finalize token</h1>
-		<!-- TODO Add address and domain -->
+		<div class="tab-header__title">Finalize token</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
 		<h2>You are about to finalize your NFT token.  After that you will not be able to upload any files anymore. Are you sure?</h2>
-		<button id="user-finalize__confirm">Confirm</button>
-		<button id="user-finalize__cancel" >Cancel</button>
-		<hr/>
+		<button class="button" id="user-finalize__confirm">Confirm</button>
+		<button class="button" id="user-finalize__cancel" >Cancel</button>
             </section>
             <section id="tab-user-transfer" class="tab">
-		<h1>Transfer token</h1>
-		<label for="user-transfer__address">Address:</label>
+		<div class="tab-header__title">Transfer token</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<label for="user-transfer__address">Address to</label>
 		<input id="user-transfer__address" name="" placeholder="Address" />
-		<button id="user-transfer__button-transfer">Transfer</button>
+		<button class="button" id="user-transfer__button-transfer">Transfer</button>
             </section>
 	    <!-- ================================================================================ -->
             <section id="tab-files" class="tab">
-		<h1>Files</h1>
-		<button id="files__upload">Upload</button>
-		<button id="files__unlink">Unlink</button>
-		<hr/>
+		<div class="tab-header__title">Files</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="files__upload">Upload</button><br/>
+		<button class="button" id="files__unlink">Unlink</button>
             </section>
 	    <section id="tab-upload-wizard-1" class="tab">
-		<h1>Step 1. Fill the form.</h1>
-		<!-- <form> -->
+		<div class="tab-header__title">Step 1. Fill the form.</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
 		<label>File:</label><input type="file" id="file" /><br/>
 		<label>Path: </label><input type="text" id="uripath" required><br />
-		<button id="chop-button">Chop</button>
-		<!-- </form> -->
-		<hr/>
+		<button class="button" id="chop-button">Chop</button>
 	    </section>
 	    <section id="tab-upload-wizard-2" class="tab">
-		<h1 id="header__step-2">Step 2.	Upload file chunks</h1>  
+		<div class="tab-header__title" id="header__step-2">Step 2. Upload file chunks</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
 	    </section>
 	    <section id="tab-upload-wizard-3" class="tab">
-		<h1 id="header__step-3">Step 3. Link file</h1>  
-		<button id="upload-wizard__link-button">Link</button>
+		<div class="tab-header__title" id="header__step-3">Step 3. Link file</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="upload-wizard__link-button">Link</button>
 	    </section>
 	    <section id="tab-upload-wizard-4" class="tab">
-		<h1>Step 4.	Congratulations</h1>  
+		<div class="tab-header__title">Step 4. Congratulations</div>  
 		<p id="message-ok"></p>
 	    </section>
             <section id="tab-unlink" class="tab">
-		<h1>Unlink</h1>
+		<div class="tab-header__title">Unlink</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
 		<label for="unlink__input">Path to the file to unlink</label>
 		<input id="unlink__input" name="" type="text" />
-		<button id="unlink__button">Unlik</button>
-		<hr/>
+		<button class="button" id="unlink__button">Unlik</button>
             </section>
 	    <!-- ================================================================================ -->
 	    <section id="tab-message-success" class="tab">
-		<h1 id="message-success__header"></h1>
+		<div class="tab-header__title" id="message-success__header"></div>
 		<p id="message-success__message"></p>
-		<hr/>
             </section>
             <section id="tab-message-error" class="tab">
-		<h1 id="message-error__header"></h1>
+		<div class="tab-header__title" id="message-error__header"></div>
 		<p id="message-error__message"></p>
-		<hr/>
             </section>
 	</main>
 	<script defer src="dapplink-upload.js"></script>

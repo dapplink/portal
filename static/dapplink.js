@@ -4,10 +4,10 @@ const CHUNK = 25000
 let file, filesha, filemime, filesize, uripath, chunks
 const HOST = 'localhost'
 
-async function open_user_nft_tab (event) {
-    event.preventDefault()
+async function open_user_nft_tab () {
     $( ".tab" ).hide() 
     $( "#tab-user-nft" ).show()
+    $( '.main-menu__link' ).removeClass( 'main-menu__link--active' )
     try {
 	let tokens  = await contract.methods.tokensOfOwner( account ).call()
 	let domains = await Promise.all(   tokens.map(  async ( token ) => await contract.methods.domains( token ).call()  )   )
@@ -17,14 +17,23 @@ async function open_user_nft_tab (event) {
 	    .data( domains )
 	    .enter()
 	    .append( "li" )
-	    .html( ( d,i ) => `<a href="#">${i} ${d} &mdash; ${tokens[i]} </a>`)
+	    // .html( ( d,i ) => `<a href="#">${i} ${d} &mdash; ${tokens[i]} </a>`)
+	    .html( ( d,i ) =>
+		   `<div class="user-nft__token-container">` +
+		   `    <div class="user-nft__token-index">${i}</div>` +
+		   `    <div class="user-nft__token-properties">` +
+		   `      <div class="user-nft__token-domain">${d}</div>` +
+		   `      <div class="user-nft_token-id">${tokens[i]}</div> ` +
+		   `    </div>` +
+		   `</div>`
+		 )
 	    .on(  "click",  async function (d,i) {
 		d3.event.preventDefault()
 		$( ".tab" ).hide()
 		$( "#tab-user-nft-actions" ).show()
 
-		$( "#user-nft-actions__token-id"     ).text( `Token Id:     ${ tokens[i]  }` )
-		$( "#user-nft-actions__token-domain" ).text( `Token domain: ${ domains[i] }` )
+		$( '.tab-header__token-id' ).text( tokens[i]  )
+		$( '.tab-header__domain'   ).text( domains[i] )
 		
 		document.getElementById( "nft-actions-button__files"    ).disabled = false
 		document.getElementById( "nft-actions-button__finalize" ).disabled = false
@@ -224,6 +233,7 @@ async function open_user_nft_tab (event) {
 				.enter()
 				.append( "button" )
 				.attr( "id", ( d, i ) => "chunk-button-" + i )
+				.attr( "class", "button")
 				.style( "display", "inline-block" )
 				.style( "width", "100px" )
 				.text( ( d, i ) => `Upload chunk ${i}` )
@@ -238,7 +248,9 @@ async function open_user_nft_tab (event) {
 						.send( { from: account })
 						.then( ( transaction ) => {
 						    chunks_state[ chunk_index ] = 1;
-						    d3.select( "#chunk-button-" + chunk_index ).style( "display", "none" );
+						    d3.select( "#chunk-button-" + chunk_index ).property( "disabled", true );
+						    d3.select( "#chunk-button-" + chunk_index ).style( "background-color", "#02ea02" );
+						    d3.select( "#chunk-button-" + chunk_index ).style( "outline", "1px solid #02ea02" );
 						    if (  chunks_state.every( v=> v == 1 )  ) {
 							$( ".tab" ).hide()
 							$( "#tab-upload-wizard-3" ).show()
@@ -257,7 +269,6 @@ async function open_user_nft_tab (event) {
 		})
 
 		$( "#upload-wizard__link-button" ).unbind().click( function() {
-		    alert("linking")
 		    contract.methods.link(
 			tokens[ i ],
 			"0x" + SHA1Generator.calcSHA1( uripath ),
@@ -294,7 +305,7 @@ async function open_user_nft_tab (event) {
 			$( "#user-approve__input" ).val( approved_address )
 		    }
 		    
-		    $( "#user-approve-button__approve" ).click( function () {
+		    $( "#user-approve-button__approve" ).unbind().click( function () {
 			let new_approved_address = $( "#user-approve__input" ).val()
 			let is_new_address_correct = web3.utils.isAddress( new_approved_address )
 			if ( !is_new_address_correct ) {
@@ -315,7 +326,7 @@ async function open_user_nft_tab (event) {
 			    })
 		    })
 
-		    $( "#user-approve-button__reset" ).click( function () {
+		    $( "#user-approve-button__reset" ).unbind().click( function () {
 			contract.methods.approve( ZERO_ADDRESS, tokens[i] ).send(
 			    {
 				from: account,
@@ -388,6 +399,7 @@ function open_send_eth_tab () {
 
     $( ".tab" ).hide() 
     $( "#tab-user-send-eth" ).show()
+    $( '.main-menu__link' ).removeClass( 'main-menu__link--active' )
 
     let is_amount_field_correct     = false
     let is_address_field_correct    = false
@@ -510,7 +522,7 @@ async function open_make_new_nft_tab () {
 	
     })
     
-    document.getElementById( "make-nft-input__mint-button" ).addEventListener( "click", async function() {
+    $( "#make-nft-input__mint-button" ).unbind().click( async function() {
 	let mint = await contract
 	    .methods
 	    .mint( domain_name )
@@ -605,18 +617,25 @@ function update_user_data() {
     
 }
 
+function openTab ( tab_css_postfix ) {
+    $( '.tab' ).hide()
+    $( '#tab-' + tab_css_postfix ).show()
+    $( '.main-menu__link' ).removeClass( 'main-menu__link--active' )
+    $( '#main-menu__' + tab_css_postfix ).addClass( 'main-menu__link--active' )
+    return false
+}
 
 
 function init() {
 
-    $( "#main-menu__home"     ).click( () => { $( ".tab" ).hide(); $( "#tab-home"      ).show(); return false })
-    $( "#main-menu__help"     ).click( () => { $( ".tab" ).hide(); $( "#tab-help"      ).show(); return false })
-    $( "#main-menu__download" ).click( () => { $( ".tab" ).hide(); $( "#tab-downloads" ).show(); return false }) //
-    $( "#main-menu__shop"     ).click( () => { $( ".tab" ).hide(); $( "#tab-shop"      ).show(); return false }) // 
-    $( "#main-menu__www"      ).click( () => { $( ".tab" ).hide(); $( "#tab-www"       ).show(); return false }) // 
-    $( "#main-menu__dpwa"     ).click( () => { $( ".tab" ).hide(); $( "#tab-dpwa"      ).show(); return false }) // 
-    $( "#main-menu__art"      ).click( () => { $( ".tab" ).hide(); $( "#tab-art"       ).show(); return false }) //
-    $( "#main-menu__apk"      ).click( () => { $( ".tab" ).hide(); $( "#tab-apk"       ).show(); return false }) //
+    $( "#main-menu__home"      ).click(  openTab.bind( null, "home"      )  )
+    $( "#main-menu__help"      ).click(  openTab.bind( null, "help"      )  )
+    $( "#main-menu__downloads" ).click(  openTab.bind( null, "downloads" )  ) //
+    $( "#main-menu__shop"      ).click(  openTab.bind( null, "shop"      )  ) // 
+    $( "#main-menu__www"       ).click(  openTab.bind( null, "www"       )  ) // 
+    $( "#main-menu__dpwa"      ).click(  openTab.bind( null, "dpwa"      )  ) // 
+    $( "#main-menu__art"       ).click(  openTab.bind( null, "art"       )  ) //
+    $( "#main-menu__apk"       ).click(  openTab.bind( null, "apk"       )  ) //
 
     $( "#user-account-menu__nft" ).click( open_user_nft_tab )
     $( "#user-account-menu__eth" ).click( open_send_eth_tab )
@@ -628,7 +647,8 @@ function init() {
     $( ".tab" ).hide()
     $( "#user-account-menu" ).hide()
     $( "#tab-home" ).show()
-    
+
+    window.onbeforeunload = function() { return false };
 }
 
 
