@@ -257,7 +257,7 @@
 	 .dapplist__icon {
 	     height: 5rem;
 	     width: 5rem;
-	     object-fit: cover;
+	     background-size: cover;
 	 }
 	 .dapplist__properties {
 	     margin-left: 1rem;
@@ -291,17 +291,60 @@
 	     font-size: 2rem;
 	 }
 	 .dapp-gallery {
+	     padding: .5rem 0;
 	     margin-top: 1.8rem;
 	     display: grid;
-	     grid-template-columns: repeat(5, 15rem);
-	     grid-template-rows: repeat(2, 30rem);
+	     /* grid-template-columns: repeat(5, 15rem); */
+	     /* grid-template-columns: repeat(5, 15rem); */
+	     grid-template-columns: repeat(10, 40rem);
+	     /* grid-template-rows: repeat(2, 30rem); */
+	     /* grid-template-rows: repeat(2, 15rem); */
+	     grid-template-rows: repeat(1, 40rem);
 	     grid-gap: 2rem;
 	     gap-color: transparent;
+	     overflow-x: scroll;
+	 }
+	 .dapp-gallery::-webkit-scrollbar {
+	     background: transparent;
+	     height: 1rem;
+	 }
+	 .dapp-gallery::-webkit-scrollbar-thumb {
+	     background: #284160;
+	     border-radius: 1rem;
+	 }
+	 .dapp-gallery::-webkit-scrollbar-thumb:hover {
+	     background: #34547c;;
+	     border-radius: 1rem;
 	 }
 	 .dapp-gallery__item {
-	     background-color: red;
+	     background-color: rgba(43,44,48,.7);
 	 }
 	 .dapp_description {}
+	 /* shop */
+	 .sale-item{
+	     margin-top: 1.8rem;
+	     display: flex;
+	     align-items: center;
+	     padding-left: 1rem;
+	     border-left: .4rem solid #284160;
+	 }
+	 .sale-item:hover {
+	     border-left: .4rem solid #34547c;
+	     background-color: rgba(43,44,48,.7);
+	 }
+	 .sale-item__properties {
+	     width: 70rem;
+	     text-transform: uppercase;
+	     font-size: 1.5rem;
+	     font-family: monospace;
+	 }
+	 .sale-item__label-domain, .sale-item__label-id, .sale-item__label-owner, .sale-item__label-price {
+	     display: inline-block;
+	     width: 8rem;
+	 }
+	 .sale-item__value-price {
+	     font-weight: bold;
+	 }
 	</style>
 	<title>Dapplink</title>
     </head>
@@ -360,166 +403,67 @@
 		<!-- temporarily no content -->
 	    </section>
             <section id="tab-shop" class="tab">
-		<!-- <div class="tab-header__title">Store</div> -->
-		<div class="tab-header__title">Telegram</div>
-                    <div class="dapp__header">
-                        <div class="dapp__icon" style="background-image: url('https://f-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png')"></div>
-                        <div class="dapp__properties">
-                            <div class="dapp__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
-			    <button class="button">Install</button>
-			</div>
+		<div class="tab-header__title">Shop</div>
+                <!-- <div class="sale-item">
+                     <div class="sale-item__properties">
+		     <div><span class="sale-item__label-domain">Domain:  </span><span class="sale-item__value-domain"> </span></div>
+		     <div><span class="sale-item__label-id">Token ID:</span><span class="sale-item__value-id"> </span></div>
+		     <div><span class="sale-item__label-owner">Owner:   </span><span class="sale-item__value-owner"> </span></div>
+		     <div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price"> </span></div>
+		     </div>
+                     <div id="sale-item__buttons">
+		     <button class="button">Buy</buttom>
+		     </div>
+		     </div> -->
+	    </section>
+            <section id="tab-citem" class="tab">
+		<div class="tab-header__title" id="citem__title"></div>
+                <div class="dapp__header">
+                    <div class="dapp__icon" id="citem__icon"></div>
+                    <div class="dapp__properties">
+                        <div class="dapp__brief-description" id="citem__brief-description"></div>
+			<button class="button" id="citem__button">Install</button>
 		    </div>
-		    <div class="dapp-gallery">
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--1"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--2"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--3"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--4"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--5"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--6"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--7"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--8"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--9"></div>
-                        <div class="dapp-gallery__item" class="dapp-gallery__item--0"></div>
-		    </div>
-                    <div class="dapp__description" id="dapp__description">
-			<p>
-			Telegram FOSS<br/>
-			Telegram is a messaging app with a focus on speed and security.<br/>
-			New in version 7.6.0<br/>
-			* Start voice chats in channels, with no limits on the number of listeners<br/>
-			* Record voice chats<br/>
-			* See user bios in the list of participants<br/>
-			* Raise a hand to show admins you want to speak
-			* Create invite links for listeners or speakers
-			* Join as a channel to hide your personal account
-			* Customize the left swipe action on chats: Pin, Read, Archive, Mute or Delete
-			* and More
-			Client for the Telegram messaging platform.
-
-			Chat with friends, start group chats and share all kinds of content. All of your messages and conversations are stored in Telegram's cloud.
-
-			The messaging platform is aimed at mobile devices, but desktop and web clients exist as well.
-
-			Several proprietary parts were removed from the original Telegram client, including Google Play Services for the location services, HockeySDK for self-updates and push notifications through Google Cloud Messaging. Location sharing functionality is restored using OpenStreetMap.
-
-			Anti-Feature: Non-Free Network, since the servers run proprietary software.
-
-			The official source code of the app contains binary blobs, so this tracks a fork which builds those from source. Hence, versions might become available with a certain lag.
-
-			License:GNU General Public License v2.0 or later Website Issue Tracker Translation Source Code Changelog Build Metadata Technical info
-
-			https://telegram.org/
-			https://github.com/Telegram-FOSS-Team/Telegram-FOSS
-
-
-			Permissions
-			access approximate location only in the foreground
-			This app can get your approximate location from location services while the app is in use. Location services for your device must be turned on for the app to get location.
-			access precise location only in the foreground
-			This app can get your precise location from location services while the app is in use. Location services for your device must be turned on for the app to get location. This may increase battery usage.
-			directly call phone numbers
-			Allows the app to call phone numbers without your intervention. This may result in unexpected charges or calls. Note that this doesn't allow the app to call emergency numbers. Malicious apps may cost you money by making calls without your confirmation.
-			run foreground service
-			Allows the app to make use of foreground services.
-			read call log
-			This app can read your call history.
-			have full network access
-			Allows the app to create network sockets and use custom network protocols. The browser and other applications provide means to send data to the internet, so this permission is not required to send data to the internet.
-			record audio
-			This app can record audio using the microphone at any time.
-			change your audio settings
-			Allows the app to modify global audio settings such as volume and which speaker is used for output.
-			view network connections
-			Allows the app to view information about network connections such as which networks exist and are connected.
-			view Wi-Fi connections
-			Allows the app to view information about Wi-Fi networking, such as whether Wi-Fi is enabled and name of connected Wi-Fi devices.
-			prevent phone from sleeping
-			Allows the app to prevent the phone from going to sleep.
-			read the contents of your shared storage
-			Allows the app to read the contents of your shared storage.
-			find accounts on the device
-			Allows the app to get the list of accounts known by the phone. This may include any accounts created by applications you have installed.
-			read your contacts
-			Allows the app to read data about your contacts stored on your phone. Apps will also have access to the accounts on your phone that have created contacts. This may include accounts created by apps you have installed. This permission allows apps to save your contact data, and malicious apps may share contact data without your knowledge.
-			modify your contacts
-			Allows the app to modify the data about your contacts stored on your phone. This permission allows apps to delete contact data.
-			toggle sync on and off
-			Allows an app to modify the sync settings for an account. For example, this can be used to enable sync of the People app with an account.
-			read sync settings
-			Allows the app to read the sync settings for an account. For example, this can determine whether the People app is synced with an account.
-			control vibration
-			Allows the app to control the vibrator.
-			This app can appear on top of other apps
-			This app can appear on top of other apps or other parts of the screen. This may interfere with normal app usage and change the way that other apps appear.
-			read phone status and identity
-			Allows the app to access the phone features of the device. This permission allows the app to determine the phone number and device IDs, whether a call is active, and the remote number connected by a call.
-			run at startup
-			Allows the app to have itself started as soon as the system has finished booting. This can make it take longer to start the phone and allow the app to slow down the overall phone by always running.
-			use fingerprint hardware
-			Allows the app to use fingerprint hardware for authentication
-			use biometric hardware
-			Allows the app to use biometric hardware for authentication
-			android.permission.INSTALL_SHORTCUT
-			install shortcuts
-			Allows an application to add Homescreen shortcuts without user intervention.
-			uninstall shortcuts
-			Allows the application to remove Homescreen shortcuts without user intervention.
-			take pictures and videos
-			This app can take pictures and record videos using the camera at any time.
-			pair with Bluetooth devices
-			Allows the app to view the configuration of the Bluetooth on the phone, and to make and accept connections with paired devices.
-			route calls through the system
-			Allows the app to route its calls through the system in order to improve the calling experience.
-			android.permission.USE_FULL_SCREEN_INTENT
-			request install packages
-			Allows an application to request installation of packages.
-			com.sec.android.provider.badge.permission.READ
-			com.sec.android.provider.badge.permission.WRITE
-			com.htc.launcher.permission.READ_SETTINGS
-			com.htc.launcher.permission.UPDATE_SHORTCUT
-			com.sonyericsson.home.permission.BROADCAST_BADGE
-			com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
-			com.anddoes.launcher.permission.UPDATE_COUNT
-			com.majeur.launcher.permission.UPDATE_BADGE
-			com.huawei.android.launcher.permission.CHANGE_BADGE
-			com.huawei.android.launcher.permission.READ_SETTINGS
-			com.huawei.android.launcher.permission.WRITE_SETTINGS
-			android.permission.READ_APP_BADGE
-			com.oppo.launcher.permission.READ_SETTINGS
-			com.oppo.launcher.permission.WRITE_SETTINGS
-			me.everything.badger.permission.BADGE_COUNT_READ
-			me.everything.badger.permission.BADGE_COUNT_WRITE
-			request install packages
-			Allows an application to request installation of packages.
-			modify or delete the contents of your shared storage
-			Allows the app to write the contents of your shared storage.
-			android.permission.ACCESS_BACKGROUND_LOCATION
-			</p>
-		    </div>
+		</div>
+		<div class="dapp-gallery">
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--1"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--2"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--3"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--4"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--5"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--6"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--7"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--8"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--9"></div>
+                    <div class="dapp-gallery__item" id="dapp-gallery__item--0"></div>
+		</div>
+                <div class="dapp__description" id="citem__description"></div>
             </section>
-            <section id="tab-www" class="tab">
-		<div class="tab-header__title">WWW</div>
-		<div class="dapplist__container">
-		    <img src="https://f-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png" class="dapplist__icon" />
-		    <div class="dapplist__properties">
-			<div class="dapplist__name">Telegram</div>
-			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
-		    </div>
-		</div>
-		<div class="dapplist__container">
-		    <div style='background-color: black; background-image: url("https://ff-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png"); background-size:cover;' class="dapplist__icon"></div>
-		    <div class="dapplist__properties">
-			<div class="dapplist__name">Telegram</div>
-			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
-		    </div>
-		</div>
-		<div class="dapplist__container">
-		    <img src="https://www.w3schools.com/html/mov_bbb.mp4" onerror="this.onerror=null;this.src='https://placeimg.com/300/300/animals';" class="dapplist__icon" />
-		    <div class="dapplist__properties">
-			<div class="dapplist__name">Telegram</div>
-			<div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
-		    </div>
-		</div>
+            <section id="tab-catalogue" class="tab">
+		<div class="tab-header__title" id="catalogue__title"></div>
+		<!--
+		     <div class="dapplist__container">
+		     <img src="https://f-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png" class="dapplist__icon" />
+		     <div class="dapplist__properties">
+		     <div class="dapplist__name">Telegram</div>
+		     <div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		     </div>
+		     </div>
+		     <div class="dapplist__container">
+		     <div style='background-color: black; background-image: url("https://ff-droid.org/repo/org.telegram.messenger/en-US/icon_yf3k2arrpvOWv5oUZ3p1Eri1ThBaYEhH0lEWqjiyFO4=.png"); background-size:cover;' class="dapplist__icon"></div>
+		     <div class="dapplist__properties">
+		     <div class="dapplist__name">Telegram</div>
+		     <div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		     </div>
+		     </div>
+		     <div class="dapplist__container">
+		     <img src="https://www.w3schools.com/html/mov_bbb.mp4" onerror="this.onerror=null;this.src='https://placeimg.com/300/300/animals';" class="dapplist__icon" />
+		     <div class="dapplist__properties">
+		     <div class="dapplist__name">Telegram</div>
+		     <div class="dapplist__brief-description">Telegram is a messaging app with a focus on speed and security.</div>
+		     </div>
+		     </div>
+		-->
             </section>
             <section id="tab-dpwa" class="tab">
 		<div class="tab-header__title">DPWA</div>
@@ -581,7 +525,7 @@
 		<button class="button" id="nft-actions-button__files"             >Files</button><br/>
 		<button class="button" id="nft-actions-button__approve"           >Approve</button><br/>
 		<button class="button" id="nft-actions-button__transfer"          >Transfer</button><br/>
-		<button class="button" id="nft-actions-button__put-on-the-market" >Put on the market</button><br/>
+		<button class="button" id="nft-actions-button__market"            >Sell</button><br/>
 		<button class="button" id="nft-actions-button__finalize"          >Finalize</button>
             </section>
             <section id="tab-user-nft-properties" class="tab">
@@ -652,7 +596,6 @@
 		<input id="user-approve__input" name="" type="text" placeholder="none" /><br />
 		<button class="button" id="user-approve-button__approve">Approve</button>
 		<button class="button" id="user-approve-button__reset"  >Reset</button>
-		<hr/>
             </section>
             <section id="tab-user-finalize" class="tab">
 		<div class="tab-header__title">Finalize token</div>
@@ -673,6 +616,24 @@
 		<label for="user-transfer__address">Address to</label>
 		<input id="user-transfer__address" name="" placeholder="Address" />
 		<button class="button" id="user-transfer__button-transfer">Transfer</button>
+            </section>
+            <section id="tab-user-sale" class="tab">
+		<div class="tab-header__title">Put token on sale</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<label for="user-sale__input-price">Price Eth</label>
+		<input id="user-sale__input-price" placeholder="0.00" />
+		<button class="button" id="user-sale__button-sale">Sell</button>
+            </section>
+	    <section id="tab-user-cancel-sale" class="tab">
+		<div class="tab-header__title">Cancel sale</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="user-cancel-sale__button-cancel-sale">Cancel sale</button>
             </section>
 	    <!-- ================================================================================ -->
             <section id="tab-files" class="tab">

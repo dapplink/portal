@@ -1,5 +1,6 @@
 const DAPPLINK = {
     address: "0x01953C35BC157467a3598B302CD1487D30Cf69F1",
+    address: "0xcD831Dc732c671537fbB612920a6366F5E5bd604",
     mint_gas: 152674,
     abi: [
 	{
@@ -742,6 +743,156 @@ const DAPPLINK = {
 ],
     bytecode: {}
 }
+const MARKET = {
+    address: "0xCdD4343F88559B2e6990Dc3b312446eE42Ae58d3",
+    abi: [
+	{
+	    "constant": false,
+	    "inputs": [
+		{
+		    "name": "_id",
+		    "type": "uint256"
+		},
+		{
+		    "name": "_price",
+		    "type": "uint256"
+		}
+	    ],
+	    "name": "addSale",
+	    "outputs": [],
+	    "payable": true,
+	    "stateMutability": "payable",
+	    "type": "function"
+	},
+	{
+	    "constant": false,
+	    "inputs": [
+		{
+		    "name": "_id",
+		    "type": "uint256"
+		}
+	    ],
+	    "name": "buy",
+	    "outputs": [],
+	    "payable": true,
+	    "stateMutability": "payable",
+	    "type": "function"
+	},
+	{
+	    "constant": false,
+	    "inputs": [
+		{
+		    "name": "_admin",
+		    "type": "address"
+		}
+	    ],
+	    "name": "changeAdmin",
+	    "outputs": [],
+	    "payable": false,
+	    "stateMutability": "nonpayable",
+	    "type": "function"
+	},
+	{
+	    "constant": false,
+	    "inputs": [
+		{
+		    "name": "_id",
+		    "type": "uint256"
+		},
+		{
+		    "name": "_price",
+		    "type": "uint256"
+		}
+	    ],
+	    "name": "removeSale",
+	    "outputs": [],
+	    "payable": false,
+	    "stateMutability": "nonpayable",
+	    "type": "function"
+	},
+	{
+	    "constant": false,
+	    "inputs": [],
+	    "name": "withdraw",
+	    "outputs": [],
+	    "payable": false,
+	    "stateMutability": "nonpayable",
+	    "type": "function"
+	},
+	{
+	    "inputs": [
+		{
+		    "name": "_address",
+		    "type": "address"
+		}
+	    ],
+	    "payable": false,
+	    "stateMutability": "nonpayable",
+	    "type": "constructor"
+	},
+	{
+	    "constant": true,
+	    "inputs": [],
+	    "name": "admin",
+	    "outputs": [
+		{
+		    "name": "",
+		    "type": "address"
+		}
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
+	},
+	{
+	    "constant": true,
+	    "inputs": [],
+	    "name": "percent",
+	    "outputs": [
+		{
+		    "name": "",
+		    "type": "uint256"
+		}
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
+	},
+	{
+	    "constant": true,
+	    "inputs": [
+		{
+		    "name": "",
+		    "type": "uint256"
+		}
+	    ],
+	    "name": "pricelist",
+	    "outputs": [
+		{
+		    "name": "",
+		    "type": "uint256"
+		}
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
+	},
+	{
+	    "constant": true,
+	    "inputs": [],
+	    "name": "sale_fee",
+	    "outputs": [
+		{
+		    "name": "",
+		    "type": "uint256"
+		}
+	    ],
+	    "payable": false,
+	    "stateMutability": "view",
+	    "type": "function"
+	}
+    ]
+}
 const NFT = {}
 const HOST = 'localhost'
 let SHA1Generator = {
@@ -843,41 +994,41 @@ let SHA1Generator = {
     }
 };
 
-const https		= require( "https"		);
-const fs		= require( "fs"			);
-const path		= require( "path"		);
-const asyn		= require( "async"		);
-const express		= require( "express"		);
-const morgan		= require( "morgan"		);
-const bodyParser	= require( "body-parser"	);
-const cookieParser	= require( "cookie-parser"	);
-const cors		= require( "cors"		);
-const multer		= require( "multer"		);
-const vhost		= require( "vhost"		);
+const https		= require( "https"		       );
+const fs		= require( "fs"			       );
+const path		= require( "path"		       );
+const asyn		= require( "async"		       );
+const express		= require( "express"		       );
+const morgan		= require( "morgan"		       );
+const bodyParser	= require( "body-parser"	       );
+const cookieParser	= require( "cookie-parser"	       );
+const cors		= require( "cors"		       );
+const multer		= require( "multer"		       );
+const vhost		= require( "vhost"		       );
+const axios             = require( "axios"                     );
+const HDWalletProvider  = require( "truffle-hdwallet-provider" );
 
-const axios = require('axios')
 /*
-TODO 
 const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/dapplink.io/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/dapplink.io/privkey.pem')
+    cert: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/privkey.pem')
 };
 */
 
-const Web3 = require('web3');
-let web3 = new Web3( "http://localhost:8545" ); // TODO refactor to dev/prod
-const contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address );
+const Web3 = require('web3')
+const provider = "https://rinkeby.infura.io/v3/85f09202e82b47a0863d04c172ec7813" 
+const web3 = new Web3( provider )
+const contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address )
+const market   = new web3.eth.Contract( MARKET.abi,   MARKET.address )
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+const NFTs = {}
 const app = express();
 
-app.use(  vhost( "*.localhost", vhostHandler )  ); // TODO refactor to dev/production switcher global variable for domain
-
+app.use(  vhost( "*.localhost", vhostHandler )  )
 app.use(  express.static( "static", { dotfiles: 'allow' } )  );
 app.use( cors() );
 app.listen( 80 ); 
 // https.createServer( options, app ).listen( 443 );
-
-
 /*
 TODO: refactor to dev/production mode switch
 
@@ -892,13 +1043,13 @@ TODO: refactor to dev/production mode switch
 */
 
 app.use( morgan( "dev" ) ); // TODO refactor
-
 app.use( cookieParser() );
-
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
-const HDWalletProvider = require('truffle-hdwallet-provider');
+app.get( "/list", function ( req, res ) {
+    res.json( NFTs );
+})
 
 
 async function vhostHandler( req, res, next ) {
@@ -956,23 +1107,28 @@ async function vhostHandler( req, res, next ) {
 }
 
 async function spider() {
-    const NFTs = {}
-    let token_id, domain_name, owner, json_metadata_uri, metadata_object
+
+    let token_id, domain_name, owner, json_metadata_uri, metadata_object, price;
     const total_supply = await contract.methods.totalSupply().call()
 
     for (let i = 1; i <= total_supply; i++) {
-	console.log( 'Token: ' + i );
 	try {
-	    token_id = await contract.methods.tokenByIndex( i ).call()
+	    token_id    = await contract.methods.tokenByIndex( i ).call()
 	    domain_name = await contract.methods.domains( token_id ).call()
-	    owner = await contract.methods.ownerOf( token_id ).call()
-	    console.table({id: token_id, domain:domain_name})
+	    owner       = await contract.methods.ownerOf( token_id ).call()
+	    allowance   = await contract.methods.getApproved( token_id ).call()
+	    if ( allowance == MARKET.address ) {
+		price = await market.methods.pricelist( token_id ).call()
+	    }
 	} catch (e) {
 	    continue
 	}
 	NFTs[ token_id ] = {}
 	NFTs[ token_id ].domain_name = domain_name
 	NFTs[ token_id ].owner = owner
+	if ( price ) {
+	    NFTs[ token_id ].price = price
+	}
 	try {
 	    const response_object = await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} )
 	    metadata_object = response_object.data
@@ -992,12 +1148,12 @@ async function spider() {
 	    if( typeof metadata_object.dapplink.preview_0			!== 'string' ) throw 'structure error'
 	    if( typeof metadata_object.dapplink.detailed_description		!== 'string' ) throw 'structure error'
 	} catch (e) {
-	    if ( i == 13 ) 
-		console.log( e )
 	    NFTs[ token_id ].metadata = null
 	    continue
 	}
 	NFTs[ token_id ].metadata = metadata_object
     }
+    setTimeout( spider, 60 * 1000 )
 }
 
+spider()

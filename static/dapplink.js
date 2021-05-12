@@ -1,8 +1,9 @@
-let contract, account, web3
+let contract, account, web3, market
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 const CHUNK = 25000
 let file, filesha, filemime, filesize, uripath, chunks
 const HOST = 'localhost'
+let catalogue = {}
 
 async function open_user_nft_tab () {
     $( ".tab" ).hide() 
@@ -364,9 +365,42 @@ async function open_user_nft_tab () {
 			    })
 		    })
 		})
-		d3.select( "#nft-actions-button__put-on-the-market" ).on( "click", function() {
-
+		
+		d3.select( "#nft-actions-button__market" ).on( "click", function() {
+		    $( ".tab" ).hide()
+		    let token_id = tokens[ i ]
+		    if (  catalogue[ token_id ].hasOwnProperty( "price" )  ) {
+			$( "#tab-user-cancel-sale" ).show()
+		    } else {
+			$( "#tab-user-sale" ).show()
+		    }
 		})
+
+		d3.select( "#user-sale__button-sale" ).on( "click", function() {
+		    let eth = $("#user-sale__input-price").val()
+		    let price = web3.utils.toWei( eth, "ether" )
+		    let token_id = tokens[ i ]
+		    market.methods.addSale( token_id, price ).send( {from:account} )
+			.then( function () {
+			    open_success_message_tab( "Operation complete", "NFT is put on the market" )
+			})
+			.catch( function () {
+			    open_error_message_tab( "Operation Error", "An error has been occurred during the operation" )
+			})
+		     
+		})
+
+		d3.select( "#user-cancel-sale__button-cancel-sale" ).on( "click", function() {
+		    let token_id = tokens[ i ]
+		    market.methods.removeSale( token_id ).send( {from: account} )
+			.then( function() {
+			    open_success_message_tab( "Operation complete", "Sale for NFT is canceled" )
+			})
+			.catch( function() {
+			    open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
+			})
+		})
+		
 		d3.select( "#nft-actions-button__finalize" ).on( "click", function () {
 		    $( ".tab" ).hide()
 		    $( "#tab-user-finalize" ).show()
@@ -473,8 +507,8 @@ function open_send_eth_tab () {
 	let amount = document.getElementById( "send-eth__amount" ).value
 	let address = document.getElementById( "send-eth__address" ).value
 	web3.eth.sendTransaction(  { from: account, to: address, value: web3.utils.toWei( amount, "ether" ) }  )
-	    .then( () => {}  ) // NB metamask will reload the page
-	    .catch( () => {} ) // 
+	    .then( () => {}  ) 
+	    .catch( () => {} ) 
     })
 
     return false
@@ -501,25 +535,18 @@ async function open_make_new_nft_tab () {
     let domain_name 
     
     document.getElementById( "make-nft-input__domain" ).addEventListener( "input", async function () {
-
 	domain_name = $( "#make-nft-input__domain" ).val()
 	document.getElementById( "make-nft-input__mint-button" ).disabled = true;
-
 	let is_correct_nft_domain_name = /^[a-z0-9]+$/.test( domain_name )
 	if ( !is_correct_nft_domain_name ) {
 	    $( "#make-nft-input__token-id" ).val( "" )
 	    return
 	}
-
 	let token_id = web3.utils.hexToNumberString(  web3.utils.keccak256( domain_name )  )
 	$( "#make-nft-input__token-id" ).val( token_id )
-	
 	let is_nft_domain_exists = await contract.methods.ownerOf( token_id ).call() == ZERO_ADDRESS
-	
 	if ( !is_nft_domain_exists ) return
-	
 	document.getElementById( "make-nft-input__mint-button" ).disabled = false
-	
     })
     
     $( "#make-nft-input__mint-button" ).unbind().click( async function() {
@@ -574,6 +601,7 @@ function log_in () {
 	    $( '#user-login-menu'   ).hide()
 	    account = addrs[ 0 ]
 	    contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address )
+	    market   = new web3.eth.Contract( MARKET.abi,   MARKET.address   )
 	    update_user_data()
 	}).catch(  function (e) {
 	    log_out()
@@ -617,21 +645,111 @@ function update_user_data() {
     
 }
 
-function openTab ( tab_css_postfix ) {
-    $( '.tab' ).hide()
-    $( '#tab-' + tab_css_postfix ).show()
-    $( '.main-menu__link' ).removeClass( 'main-menu__link--active' )
-    $( '#main-menu__' + tab_css_postfix ).addClass( 'main-menu__link--active' )
-    return false
+function openTab ( tab ) {
+    $( ".tab" ).hide()
+    $( ".main-menu__link" ).removeClass( "main-menu__link--active" )
+    $( "#main-menu__" + tab ).addClass( "main-menu__link--active" )
+    if (  !["www", "dpwa", "art", "apk"].some( x => x == tab )  ) {
+	$( "#tab-" + tab ).show()
+	return
+    }
+    $( "#tab-catalogue"       ).show()
+    $( "#catalogue__title"    ).text( tab.toUpperCase() )
+    $( ".dapplist__container" ).remove()
+    let c = catalogue
+    for ( let i in c ) {
+	if ( c[i].metadata == null ) continue
+	if ( c[i].metadata.dapplink.token_type.toLowerCase() !== tab ) continue
+	let icon_uri = "http://" + c[i].domain_name + "." + HOST + "/dapplink-icon.png"
+	$( "#tab-catalogue" ).append(`<div class="dapplist__container">
+                                          <div style="background-image: url('${icon_uri}');" class="dapplist__icon"></div>
+                                          <div class="dapplist__properties">
+                                              <div class="dapplist__name">${ c[i].metadata.properties.name.description }</div>
+                                              <div class="dapplist__brief-description">${ c[i].metadata.properties.description.description }</div>
+                                           </div>
+                                        </div>
+       `).click( openCatalogueItem.bind(null, i))
+    }
 }
 
+function openShop() {
+    $( ".tab").hide()
+    $( "#tab-shop" ).show()
+    let c = catalogue
+    for ( let i in c ) {
+	if ( !c.hasOwnProperty( "price" ) ) continue
+	$( "#tab-shop" ).append(`
+	    <div class="sale-item">
+              <div class="sale-item__properties">
+			<div><span class="sale-item__label-domain">Domain:  </span><span class="sale-item__value-domain">${  c[i].domain_name  }</span></div>
+			<div><span class="sale-item__label-id">Token ID:</span><span class="sale-item__value-id">${  i  }</span></div>
+			<div><span class="sale-item__label-owner">Owner:   </span><span class="sale-item__value-owner">${  c[i].owner  }</span></div>
+			<div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price">${  c[i].price  }</span></div>
+		    </div>
+                    <div id="sale-item__buttons">
+			<button class="button" onclick="buyNFT( ${i} )">Buy</buttom>
+		    </div>
+		</div>
+        `);
+    }
+}
+
+function buyNFT( token_id ) {
+    market.methods.buy( token_id ).send( {from: accaunt} )
+	.then( function (transaction) {
+	    open_success_message_tab( "Operation complete", "You have successfully bought NFT" )
+	})
+	.catch( function (error) {
+	    open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
+	})
+}
+
+
+function openCatalogueItem( id ) {
+    const c = catalogue[ id ]
+    $( ".tab" ).hide()
+    $( "#tab-citem" ).show()
+    $( ".main-menu__link" ).removeClass( "main-menu__link--active" )
+    $( "#citem__title" ).text( c.metadata.properties.name.description )
+    let icon_uri = "http://" + c.domain_name + "." + HOST + "/dapplink-icon.png"
+    $( "#citem__icon" ).css( "background-image", `url("${icon_uri}")` )
+    $( "#citem__brief-description" ).text( c.metadata.properties.description.description )
+    if( c.metadata.dapplink.token_type == "APK" ) {
+	$( "#citem__button" ).text( 'Install' )
+    } else {
+	$( "#citem__button" ).text( 'Open' )
+    }
+    $( "#citem__button" ).unbind().click( function (uri) {
+	window.open(uri)
+    }.bind(null, c.metadata.properties.image.description))
+    for( let i = 0; i <= 9; i++ ) {
+	let preview_uri = c.metadata.dapplink[ "preview_" + i ]
+	if(  preview_uri == "" ) {
+	    $( "#dapp-gallery__item--" + i ).hide()
+	    continue
+	}
+	$( "#dapp-gallery__item--" + i ).show()
+	$( "#dapp-gallery__item--" + i ).css( "background-image", `url('${preview_uri}')` )
+    }
+    let description = c.metadata.detailed_description // .replace(/(?:\r\n|\r|\n)/g, '<br />')
+    $( "#citem__description" ).text( description )
+    $( "#citem__description" ).html(   $( "#citem__description" ).text().replace(/(?:\r\n|\r|\n)/g, '<br />')  )    
+}
+
+function updateCatalogue() {
+    $.getJSON( `/list`, function (  _catalogue, status  ) {
+	if (status !== 'success') return
+	catalogue = _catalogue
+    })
+    setTimeout( updateCatalogue, 5 * 1000 )
+}
 
 function init() {
 
     $( "#main-menu__home"      ).click(  openTab.bind( null, "home"      )  )
     $( "#main-menu__help"      ).click(  openTab.bind( null, "help"      )  )
     $( "#main-menu__downloads" ).click(  openTab.bind( null, "downloads" )  ) //
-    $( "#main-menu__shop"      ).click(  openTab.bind( null, "shop"      )  ) // 
+    $( "#main-menu__shop"      ).click(  openShop                        ) // 
     $( "#main-menu__www"       ).click(  openTab.bind( null, "www"       )  ) // 
     $( "#main-menu__dpwa"      ).click(  openTab.bind( null, "dpwa"      )  ) // 
     $( "#main-menu__art"       ).click(  openTab.bind( null, "art"       )  ) //
@@ -649,6 +767,7 @@ function init() {
     $( "#tab-home" ).show()
 
     window.onbeforeunload = function() { return false };
+    updateCatalogue()
 }
 
 
