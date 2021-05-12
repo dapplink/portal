@@ -372,8 +372,21 @@ async function open_user_nft_tab () {
 		    if (  catalogue[ token_id ].hasOwnProperty( "price" )  ) {
 			$( "#tab-user-cancel-sale" ).show()
 		    } else {
-			$( "#tab-user-sale" ).show()
-		    }
+			$( "#tab-user-approve-sale" ).show() // 
+		    } // #user-sale__button-sale
+		})
+
+		d3.select( "#user-approve-sale__button" ).on( "click", function() {
+		    let token_id = tokens[ i ]
+		    contract.methods.approve( MARKET.address, token_id ).send( {from: account} )
+			.then( function () {
+			    $( ".tab" ).hide()
+			    $( "#tab-user-sale" ).show()
+			})
+			.catch( function () {
+			    open_error_message_tab( "Operation Error", "An error has been occurred during the operation" )
+			})
+		     
 		})
 
 		d3.select( "#user-sale__button-sale" ).on( "click", function() {
@@ -675,10 +688,12 @@ function openTab ( tab ) {
 
 function openShop() {
     $( ".tab").hide()
+    $( ".main-menu__link" ).removeClass( "main-menu__link--active" )
+    $( "#main-menu__shop" ).addClass( "main-menu__link--active" )
     $( "#tab-shop" ).show()
     let c = catalogue
     for ( let i in c ) {
-	if ( !c.hasOwnProperty( "price" ) ) continue
+	if ( !c[i].hasOwnProperty( "price" ) ) continue
 	$( "#tab-shop" ).append(`
 	    <div class="sale-item">
               <div class="sale-item__properties">
@@ -696,13 +711,17 @@ function openShop() {
 }
 
 function buyNFT( token_id ) {
-    market.methods.buy( token_id ).send( {from: accaunt} )
+    try {
+    market.methods.buy( token_id ).send( {from: account} )
 	.then( function (transaction) {
 	    open_success_message_tab( "Operation complete", "You have successfully bought NFT" )
 	})
 	.catch( function (error) {
 	    open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
 	})
+    } catch(e) {
+	open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
+    }
 }
 
 
