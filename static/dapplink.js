@@ -661,14 +661,15 @@ function openTab ( tab ) {
 	if ( c[i].metadata == null ) continue
 	if ( c[i].metadata.dapplink.token_type.toLowerCase() !== tab ) continue
 	let icon_uri = "http://" + c[i].domain_name + "." + HOST + "/dapplink-icon.png"
-	$( "#tab-catalogue" ).append(`<div class="dapplist__container">
+	$( "#tab-catalogue" ).append(`<div class="dapplist__container" id="dapplist-${i}">
                                           <div style="background-image: url('${icon_uri}');" class="dapplist__icon"></div>
                                           <div class="dapplist__properties">
                                               <div class="dapplist__name">${ c[i].metadata.properties.name.description }</div>
                                               <div class="dapplist__brief-description">${ c[i].metadata.properties.description.description }</div>
                                            </div>
                                         </div>
-       `).click( openCatalogueItem.bind(null, i))
+       `)// .unbind().click( openCatalogueItem.bind(null, i))
+	$( "#dapplist-" + i ).click( openCatalogueItem.bind(null, i))
     }
 }
 
