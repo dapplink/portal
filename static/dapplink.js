@@ -690,6 +690,7 @@ function openShop() {
     $( ".tab").hide()
     $( ".main-menu__link" ).removeClass( "main-menu__link--active" )
     $( "#main-menu__shop" ).addClass( "main-menu__link--active" )
+    $( ".sale-item" ).remove()
     $( "#tab-shop" ).show()
     let c = catalogue
     for ( let i in c ) {
@@ -751,9 +752,9 @@ function openCatalogueItem( id ) {
 	$( "#dapp-gallery__item--" + i ).show()
 	$( "#dapp-gallery__item--" + i ).css( "background-image", `url('${preview_uri}')` )
     }
-    let description = c.metadata.detailed_description // .replace(/(?:\r\n|\r|\n)/g, '<br />')
-    $( "#citem__description" ).text( description )
-    $( "#citem__description" ).html(   $( "#citem__description" ).text().replace(/(?:\r\n|\r|\n)/g, '<br />')  )    
+    let description = c.metadata.dapplink.detailed_description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+    $( "#citem__description" ).html( description )
+    // $( "#citem__description" ).html(   $( "#citem__description" ).text().replace(/(?:\r\n|\r|\n)/g, '<br />')  )    
 }
 
 function updateCatalogue() {
