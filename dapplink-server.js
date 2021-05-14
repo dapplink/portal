@@ -1048,7 +1048,9 @@ app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
 app.get( "/list", function ( req, res ) {
-    res.json( NFTs );
+    // res.json( NFTs );
+    res.setHeader('Content-Type', 'application/json');
+    res.end( JSON.stringify( NFTs, 0, 2 ))
 })
 
 
@@ -1107,53 +1109,66 @@ async function vhostHandler( req, res, next ) {
 }
 
 async function spider() {
-
-    let token_id, domain_name, owner, json_metadata_uri, metadata_object, price;
+    
     const total_supply = await contract.methods.totalSupply().call()
-
+    
     for (let i = 1; i <= total_supply; i++) {
+	let token_id, domain_name, owner, json_metadata_uri, metadata_object, price;
 	try {
 	    token_id    = await contract.methods.tokenByIndex( i ).call()
 	    domain_name = await contract.methods.domains( token_id ).call()
 	    owner       = await contract.methods.ownerOf( token_id ).call()
 	    allowance   = await contract.methods.getApproved( token_id ).call()
-	    if ( allowance == MARKET.address ) {
-		price = await market.methods.pricelist( token_id ).call()
-	    }
-	} catch (e) {
-	    continue
-	}
-	NFTs[ token_id ] = {}
-	NFTs[ token_id ].domain_name = domain_name
-	NFTs[ token_id ].owner = owner
-	if ( price ) {
-	    NFTs[ token_id ].price = price
-	}
-	try {
-	    const response_object = await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} )
-	    metadata_object = response_object.data
-	    if( typeof metadata_object.properties.name.description		!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.properties.description.description	!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.token_type			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.properties.image.description		!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_1			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_2			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_3			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_4			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_5			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_6			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_7			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_8			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_9			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.preview_0			!== 'string' ) throw 'structure error'
-	    if( typeof metadata_object.dapplink.detailed_description		!== 'string' ) throw 'structure error'
-	} catch (e) {
+	    if ( allowance == MARKET.address ) price = await market.methods.pricelist( token_id ).call()
+
+	    NFTs[ token_id ] = {}
+	    NFTs[ token_id ].domain_name = domain_name
+	    NFTs[ token_id ].owner = owner
+	    NFTs[ token_id ].price = price ? price : null
 	    NFTs[ token_id ].metadata = null
+	    try {
+		const r = ( await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} ) ).data
+		if( typeof r.properties.name.description	!== 'string' ) throw 'structure error'
+		if( typeof r.properties.description.description	!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.token_type		!== 'string' ) throw 'structure error'
+		if( typeof r.properties.image.description	!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_1			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_2			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_3			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_4			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_5			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_6			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_7			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_8			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_9			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.preview_0			!== 'string' ) throw 'structure error'
+		if( typeof r.dapplink.detailed_description	!== 'string' ) throw 'structure error'
+		NFTs[ token_id ].metadata = r
+	    } catch (e) {}
+	} catch (e) {
+	    console.log( 'Error with token index: ' + i );
 	    continue
 	}
-	NFTs[ token_id ].metadata = metadata_object
     }
-    setTimeout( spider, 60 * 1000 )
+    setTimeout( spider, 10 * 1000 )
 }
 
 spider()
+
+function is_nft_json_correct() {
+    if( typeof metadata_object.properties.name.description		!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.properties.description.description	!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.token_type			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.properties.image.description		!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_1			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_2			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_3			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_4			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_5			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_6			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_7			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_8			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_9			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.preview_0			!== 'string' ) throw 'structure error'
+    if( typeof metadata_object.dapplink.detailed_description		!== 'string' ) throw 'structure error'
+}

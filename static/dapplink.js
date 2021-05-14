@@ -369,11 +369,11 @@ async function open_user_nft_tab () {
 		d3.select( "#nft-actions-button__market" ).on( "click", function() {
 		    $( ".tab" ).hide()
 		    let token_id = tokens[ i ]
-		    if (  catalogue[ token_id ].hasOwnProperty( "price" )  ) {
-			$( "#tab-user-cancel-sale" ).show()
+		    if (  !catalogue[ token_id ].price  ) {
+			$( "#tab-user-approve-sale" ).show()
 		    } else {
-			$( "#tab-user-approve-sale" ).show() // 
-		    } // #user-sale__button-sale
+			$( "#tab-user-cancel-sale" ).show()
+		    }
 		})
 
 		d3.select( "#user-approve-sale__button" ).on( "click", function() {
@@ -694,17 +694,17 @@ function openShop() {
     $( "#tab-shop" ).show()
     let c = catalogue
     for ( let i in c ) {
-	if ( !c[i].hasOwnProperty( "price" ) ) continue
+	if ( !c[i].price ) continue
 	$( "#tab-shop" ).append(`
 	    <div class="sale-item">
               <div class="sale-item__properties">
 			<div><span class="sale-item__label-domain">Domain:  </span><span class="sale-item__value-domain">${  c[i].domain_name  }</span></div>
 			<div><span class="sale-item__label-id">Token ID:</span><span class="sale-item__value-id">${  i  }</span></div>
 			<div><span class="sale-item__label-owner">Owner:   </span><span class="sale-item__value-owner">${  c[i].owner  }</span></div>
-			<div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price">${  c[i].price  }</span></div>
+			<div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price">${  c[i].price / 10 ** 18 }</span></div>
 		    </div>
                     <div id="sale-item__buttons">
-			<button class="button" onclick="buyNFT( ${i} )">Buy</buttom>
+			<button class="button" onclick="buyNFT( '${i}' )">Buy</buttom>
 		    </div>
 		</div>
         `);
@@ -712,17 +712,14 @@ function openShop() {
 }
 
 function buyNFT( token_id ) {
-    try {
-    market.methods.buy( token_id ).send( {from: account} )
+    
+    market.methods.buy( token_id ).send( {from: account, value: catalogue[ token_id ].price } )
 	.then( function (transaction) {
 	    open_success_message_tab( "Operation complete", "You have successfully bought NFT" )
 	})
 	.catch( function (error) {
 	    open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
 	})
-    } catch(e) {
-	open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
-    }
 }
 
 
