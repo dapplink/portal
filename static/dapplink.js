@@ -659,7 +659,7 @@ async function open_make_new_nft_tab () {
     $( "#make-nft-input__domain" ).val("")
     document.getElementById( "make-nft-input__mint-button"         ).disabled = true
     document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
-    let mint_fee, approved_sum
+    let mint_fee, approved_sum, paw_balance
 
     let domain_name 
     
@@ -676,18 +676,26 @@ async function open_make_new_nft_tab () {
 	let is_nft_domain_exists = await contract.methods.ownerOf( token_id ).call() == ZERO_ADDRESS
 	if ( !is_nft_domain_exists ) return
 	try {
-	    mint_fee     = await minter.methods.get_total_price( domain_name ).call()
-	    approved_sum = await paw.methods.allowance( account, MINTER.address ).call()
+	    mint_fee     = +await minter.methods.get_total_price( domain_name ).call()
+	    approved_sum = +await paw.methods.allowance( account, MINTER.address ).call()
+	    paw_balance  = +await paw.methods.balanceOf( account ).call()
 	    let mint_fee_readable = (mint_fee / 10 ** 18).toFixed( 0 )
 	    $( "#make-nft-input__total-price-paw" ).val( mint_fee_readable )
-
-	    if ( approved_sum >= mint_fee ) {
+	    console.table( {appr: approved_sum, fee: mint_fee, ubalance: paw_balance} );
+	    if ( (approved_sum >= mint_fee) && (paw_balance > mint_fee) ) {
+		console.log( 'case1' );
 		document.getElementById( "make-nft-input__mint-button"         ).disabled = false
 		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
-	    } else {
+		return
+	    }
+	    if ( approved_sum < mint_fee && paw_balance > mint_fee ) {
+		console.log( 'case2' );
 		document.getElementById( "make-nft-input__mint-button"         ).disabled = true
 		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = false
+		return
 	    }
+	    document.getElementById( "make-nft-input__mint-button"         ).disabled = true
+	    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
 	} catch(e) {
 	    document.getElementById( "make-nft-input__mint-button"         ).disabled = true
 	    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
