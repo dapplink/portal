@@ -41,6 +41,8 @@ async function open_user_nft_tab () {
 		document.getElementById( "royalty__add"         ).disabled = false
 		document.getElementById( "royalty__undo"        ).disabled = false
 		document.getElementById( "royalty-percent__set" ).disabled = false
+
+		document.getElementById( "user-nft-properties__button_upload" ).disabled = false
 		
 		let isFinalize = await contract.methods.closed(  tokens[ i ]  ).call() // todo add error handler
 		if ( isFinalize ) {
@@ -50,6 +52,8 @@ async function open_user_nft_tab () {
 		    document.getElementById( "royalty__add"         ).disabled = true
 		    document.getElementById( "royalty__undo"        ).disabled = true
 		    document.getElementById( "royalty-percent__set" ).disabled = true
+
+		    document.getElementById( "user-nft-properties__button_upload" ).disabled = true
 		}
 
 		d3.select( "#nft-actions-button__properties" ).on( "click", function () {
