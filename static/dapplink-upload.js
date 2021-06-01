@@ -96,40 +96,8 @@ let SHA1Generator = {
 	}
     }
 };
-
-
 function buf2hex( buffer ) {
     
     return Array.prototype.map.call(   new Uint8Array( buffer ), x => (  "00" + x.toString( 16 )  ).slice( -2 )   ).join( "" );
     
 }
-
-
-function step3() {
-
-    d3.select( "#section-2" ).style( "display", "none" );
-    d3.select( "#section-3" ).style( "display", "block" );
-
-    d3.select( "#header__step-2" ).style( "display", "none" );
-    d3.select( "#header__step-3" ).style( "display", "block" );
-
-    d3.select( "#link" ).on( "click", link );
-
-}
-
-function link() {
-
-}
-
-function step4() {
-    d3.select( "#section-3" ).style( "display", "none" );
-    d3.select( "#section-4" ).style( "display", "block" );
-
-    d3.select( "#header__step-3" ).style( "display", "none" );
-    d3.select( "#header__step-4" ).style( "display", "block" );
-
-    d3.select( "#message-ok" ).html( `File at <strong>http://${smart}.dappweb.io/${uripath}</strong> has been successfully upload` );
-}
-
-
-

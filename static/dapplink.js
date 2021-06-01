@@ -1,4 +1,4 @@
-let contract, account, web3, market
+let contract, account, web3, market, paw, minter, royalty, charity
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 const CHUNK = 25000
 let file, filesha, filemime, filesize, uripath, chunks
@@ -18,7 +18,6 @@ async function open_user_nft_tab () {
 	    .data( domains )
 	    .enter()
 	    .append( "li" )
-	    // .html( ( d,i ) => `<a href="#">${i} ${d} &mdash; ${tokens[i]} </a>`)
 	    .html( ( d,i ) =>
 		   `<div class="user-nft__token-container">` +
 		   `    <div class="user-nft__token-index">${i}</div>` +
@@ -39,10 +38,18 @@ async function open_user_nft_tab () {
 		document.getElementById( "nft-actions-button__files"    ).disabled = false
 		document.getElementById( "nft-actions-button__finalize" ).disabled = false
 		
+		document.getElementById( "royalty__add"         ).disabled = false
+		document.getElementById( "royalty__undo"        ).disabled = false
+		document.getElementById( "royalty-percent__set" ).disabled = false
+		
 		let isFinalize = await contract.methods.closed(  tokens[ i ]  ).call() // todo add error handler
 		if ( isFinalize ) {
 		    document.getElementById( "nft-actions-button__files"    ).disabled = true
 		    document.getElementById( "nft-actions-button__finalize" ).disabled = true
+
+		    document.getElementById( "royalty__add"         ).disabled = true
+		    document.getElementById( "royalty__undo"        ).disabled = true
+		    document.getElementById( "royalty-percent__set" ).disabled = true
 		}
 
 		d3.select( "#nft-actions-button__properties" ).on( "click", function () {
@@ -137,19 +144,19 @@ async function open_user_nft_tab () {
 			    detailed_description: $( "#user-nft-properties__detailed-description" ).val()
 			}
 		    }
-		    function str2ab(str) {
-			var buf = new ArrayBuffer(str.length*2);
-			var bufView = new Uint16Array(buf);
-			for (var i=0, strLen=str.length; i<strLen; i++) {
-			    bufView[i] = str.charCodeAt(i);
+		    function str2ab( str ) {
+			var buf = new ArrayBuffer( str.length * 2 );
+			var bufView = new Uint16Array( buf );
+			for (var i = 0, strLen = str.length; i < strLen; i++) {
+			    bufView[ i ] = str.charCodeAt( i );
 			}
 			return buf;
 		    }
-		    function getBytes(str){
-			let intArray=str.split ('').map (function (c) { return c.charCodeAt (0); });
-			let byteArray=new Uint8Array(intArray.length);
-			for (let i=0;i<intArray.length;i++)
-			    byteArray[i]=intArray[i];
+		    function getBytes( str ) {
+			let intArray = str.split( '' ).map( function( c ) { return c.charCodeAt( 0 ); } );
+			let byteArray = new Uint8Array( intArray.length );
+			for ( let i = 0; i < intArray.length; i++ )
+			    byteArray[ i ] = intArray[ i ];
 			return byteArray;
 		    }
 		    // let nft_json_array_buffer = str2ab(  JSON.stringify( nft_json, 0, 2 )  )
@@ -365,47 +372,160 @@ async function open_user_nft_tab () {
 			    })
 		    })
 		})
+
+		d3.select( "#nft-actions-button__royalty" ).on( "click", async function() {
+		    $( ".tab" ).hide()
+		    $( "#tab-royalties" ).show()
+		    const is_token_closed = await contract.methods.closed( tokens[i] ).call()
+		    if (is_token_closed) {
+			document.getElementById( "royalty__add"  ).disabled = true
+			document.getElementById( "royalty__undo" ).disabled = true
+		    }
+		    
+		})
+
+		d3.select( "#royalty__show" ).on( "click", async function () {
+		    $( ".tab" ).hide()
+		    $( "#tab-royalties__show" ).show()
+		    const beneficiaries = []
+		    try {
+			let number_of_beneficiaries = await royalty.methods.number_of_beneficiaries( tokens[i] ).call()
+			for (let j = 1; j <= number_of_beneficiaries; j++) {
+			    let beneficiary = await royalty.methods.beneficiaries( tokens[i], j ).call()
+			    let share       = await royalty.methods.share_of_beneficiary( tokens[i], j ).call()
+			    beneficiaries.push( {beneficiary: beneficiary, share: share} )
+			}
+			d3.select( "#royalty__table").select( "tbody" ).selectAll( "tr" ).remove()
+			d3.select( "#royalty__table" )
+			    .select( "tbody" )
+			    .selectAll( "tr" )
+			    .data( beneficiaries )
+			    .enter()
+			    .append( "tr" )
+			    .html( (d) => `<td> ${ d.beneficiary } </td><td> ${ d.share } </td>`  )
+		    } catch(e) {
+			open_error_message_tab();
+		    }
+		})
+		d3.select( ".royalty__back" ).on( "click", function() {
+		    $( ".tab" ).hide()
+		    $( "#tab-royalties" ).show()
+		}) 
+		d3.select( "#royalty__add" ).on( "click", async function () {
+		    $( ".tab" ).hide()
+		    $( "#royalty-add__address" ).val( "" )
+		    $( "#royalty-add__share"   ).val( "" )
+		    $( "#tab-royalty__add" ).show()
+		})
+		d3.select( "#royalty-add__button-set" ).on( "click", async function() {
+		    let beneficiary = {
+			address: $( "#royalty-add__address" ).val(),
+			share: $( "#royalty-add__share" ).val()
+		    }
+		    try {
+			await royalty.methods.add_beneficiary( tokens[i], beneficiary.address, beneficiary.share ).send( {from: account} )
+			$( ".tab" ).hide()
+			open_success_message_tab( "Operation complete", "Beneficiary has been successfully added" )
+		    } catch(e) {
+			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
+		    }
+		})
+		d3.select( "#royalty__undo" ).on( "click", async function () {
+		    try {
+			await royalty.methods.remove_last_beneficiary( tokens[i] ).send( {from: account} )
+			open_success_message_tab( "Operation complete", "Last added beneficiary has been successfully removed from royalty list" )
+		    } catch(e){
+			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
+		    }
+		})
+		d3.select( "#royalty__volume" ).on( "click", async function () {
+		    $( ".tab" ).hide()
+		    $( "#tab-royalty-percent" ).show()
+		    const is_token_closed = await contract.methods.closed( tokens[i] ).call()
+		    is_token_closed
+			? document.getElementById( "royalty-percent__set" ).disabled = true
+			: document.getElementById( "royalty-percent__set" ).disabled = false
+		    let current_percent
+		    try {
+			current_percent = await royalty.methods.royalty_percent( tokens[i] ).call()
+			$( "#royalty-percent__value" ).val( current_percent )
+		    } catch(e) {
+			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
+		    }
+		    
+		})
+		d3.select( "#royalty-percent__set" ).on( "click", async function() {
+		    let percent = $( "#royalty-percent__value" ).val()
+		    try {
+			await royalty.methods.set_royalty_percent( tokens[i], percent ).send( {from: account} )
+			open_success_message_tab( "Operation complete", "Royalty percent has been set" )
+		    } catch(e) {
+			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
+		    }
+		})
 		
 		d3.select( "#nft-actions-button__market" ).on( "click", function() {
 		    $( ".tab" ).hide()
 		    let token_id = tokens[ i ]
-		    if (  !catalogue[ token_id ].price  ) {
+		    if ( !catalogue[ token_id ].price ) {
 			$( "#tab-user-approve-sale" ).show()
 		    } else {
 			$( "#tab-user-cancel-sale" ).show()
 		    }
 		})
 
-		d3.select( "#user-approve-sale__button" ).on( "click", function() {
+		d3.select( "#user-approve-sale__button" ).on( "click", async function() {
 		    let token_id = tokens[ i ]
-		    contract.methods.approve( MARKET.address, token_id ).send( {from: account} )
-			.then( function () {
-			    $( ".tab" ).hide()
-			    $( "#tab-user-sale" ).show()
-			})
-			.catch( function () {
-			    open_error_message_tab( "Operation Error", "An error has been occurred during the operation" )
-			})
-		     
+		    try {
+			await contract.methods.approve( MARKET.address, token_id ).send( {from: account} )
+			$( ".tab" ).hide()
+			const number_of_charities = await charity.methods.number_of_charities().call()
+			const charity_list = []
+			for ( let j = 1; j <= number_of_charities; j++ ) {
+			    charity_list.push( await charity.methods.charity_list( j ).call() )
+			}
+			d3.select( "#user-charity-select" ).selectAll( "option" ).remove()
+			d3.select( "#user-charity-select" )
+			    .selectAll( "option" )
+			    .data( charity_list )
+			    .enter()
+			    .append( "option" )
+			    .attr( "value", d => d )
+			    .text( d => d )
+			$( "#tab-user-charity" ).show()
+		    } catch(e) {
+			open_error_message_tab( "Operation Error", "An error has been occurred during the operation" )
+		    }
 		})
 
+		d3.select( "#user-charity__select-button" ).on( "click", async function() {
+		    const charity_address = d3.select( "#user-charity-select" ).property( "value" )
+		    try {
+			await charity.methods.make_charity_order( tokens[i], charity_address ).send( {from: account} )
+			$( ".tab" ).hide()
+			$( "#tab-user-sale" ).show()
+		    } catch( e ) {
+			open_error_message_tab()
+		    }
+		})
+		
 		d3.select( "#user-sale__button-sale" ).on( "click", function() {
 		    let eth = $("#user-sale__input-price").val()
 		    let price = web3.utils.toWei( eth, "ether" )
 		    let token_id = tokens[ i ]
-		    market.methods.addSale( token_id, price ).send( {from:account} )
-			.then( function () {
+		    market.methods.add_sale( token_id, price ).send( {from:account} )
+			.then( function() {
 			    open_success_message_tab( "Operation complete", "NFT is put on the market" )
 			})
-			.catch( function () {
+			.catch( function() {
 			    open_error_message_tab( "Operation Error", "An error has been occurred during the operation" )
 			})
-		     
 		})
 
 		d3.select( "#user-cancel-sale__button-cancel-sale" ).on( "click", function() {
 		    let token_id = tokens[ i ]
-		    market.methods.removeSale( token_id ).send( {from: account} )
+		    // TODO get rid of last para in smart contract
+		    market.methods.cancel_sale( token_id, 0 ).send( {from: account} )
 			.then( function() {
 			    open_success_message_tab( "Operation complete", "Sale for NFT is canceled" )
 			})
@@ -439,8 +559,6 @@ async function open_user_nft_tab () {
     }
     return false    
 }
-
-
 
 function open_send_eth_tab () {
 
@@ -520,30 +638,24 @@ function open_send_eth_tab () {
 	let amount = document.getElementById( "send-eth__amount" ).value
 	let address = document.getElementById( "send-eth__address" ).value
 	web3.eth.sendTransaction(  { from: account, to: address, value: web3.utils.toWei( amount, "ether" ) }  )
-	    .then( () => {}  ) 
-	    .catch( () => {} ) 
+	    .then( function() {
+		open_success_message_tab( "Funds sent" )
+	    }).catch( function() {
+		open_error_message_tab()
+	    }) 
     })
 
     return false
 }
-
-
 
 async function open_make_new_nft_tab () {
 
     $( ".tab" ).hide()
     $( "#tab-user-make-nft" ).show()
     $( "#make-nft-input__domain" ).val("")
-    let mint_fee     = await contract.methods.fee_mint().call()
-
-    let estimate_gas = DAPPLINK.mint_gas;
-    let gas_price    = await web3.eth.getGasPrice()
-    let total_price  = estimate_gas * ( gas_price / 10 ** 18 ) + mint_fee / 10 ** 18
-
-    $( "#make-nft-input__mint-fee"     ).val( mint_fee / 10 ** 18 )
-    $( "#make-nft-input__gas-price"    ).val( gas_price / 10 ** 9 )
-    $( "#make-nft-input__estimate-gas" ).val( estimate_gas        )
-    $( "#make-nft-input__total-price"  ).val( total_price         )
+    document.getElementById( "make-nft-input__mint-button"         ).disabled = true
+    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+    let mint_fee, approved_sum
 
     let domain_name 
     
@@ -559,19 +671,38 @@ async function open_make_new_nft_tab () {
 	$( "#make-nft-input__token-id" ).val( token_id )
 	let is_nft_domain_exists = await contract.methods.ownerOf( token_id ).call() == ZERO_ADDRESS
 	if ( !is_nft_domain_exists ) return
-	document.getElementById( "make-nft-input__mint-button" ).disabled = false
+	try {
+	    mint_fee     = await minter.methods.get_total_price( domain_name ).call()
+	    approved_sum = await paw.methods.allowance( account, MINTER.address ).call()
+	    let mint_fee_readable = (mint_fee / 10 ** 18).toFixed( 0 )
+	    $( "#make-nft-input__total-price-paw" ).val( mint_fee_readable )
+
+	    if ( approved_sum >= mint_fee ) {
+		document.getElementById( "make-nft-input__mint-button"         ).disabled = false
+		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+	    } else {
+		document.getElementById( "make-nft-input__mint-button"         ).disabled = true
+		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = false
+	    }
+	} catch(e) {
+	    document.getElementById( "make-nft-input__mint-button"         ).disabled = true
+	    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+	}
     })
+
+    $( "#make-nft-input__approve-mint-button" ).unbind().click( async function() {
+	try {
+	    await paw.methods.approve( MINTER.address, mint_fee ).send( {from: account} )
+	    document.getElementById( "make-nft-input__mint-button"         ).disabled = false
+	    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+	} catch(e) {
+	    document.getElementById( "make-nft-input__mint-button"         ).disabled = true
+	    document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+	}
+    });
     
     $( "#make-nft-input__mint-button" ).unbind().click( async function() {
-	let mint = await contract
-	    .methods
-	    .mint( domain_name )
-	    .send({
-		from: account,
-		// gasPrice: gas_price,
-		// gas: estimate_gas,
-		value: mint_fee
-	    })
+	await minter.methods.mint( domain_name ).send( {from: account} )
 	open_user_nft_tab()
     })
 
@@ -579,9 +710,7 @@ async function open_make_new_nft_tab () {
     
 }
 
-
-
-function open_success_message_tab( header, message ) {
+function open_success_message_tab( header="Operation complete", message="Operation has been successfully done" ) {
 
     $( ".tab" ).hide()
     $( "#tab-message-success" ).show()
@@ -590,9 +719,7 @@ function open_success_message_tab( header, message ) {
     
 }
 
-
-
-function open_error_message_tab( header, message ) {
+function open_error_message_tab( header="Operation error", message="An error has been occurred during the operation" ) {
 
     $( ".tab" ).hide()
     $( "#tab-message-error" ).show()
@@ -600,8 +727,6 @@ function open_error_message_tab( header, message ) {
     $( "#message-error__message" ).text( message )
 
 }
-
-
 
 function log_in () {
     
@@ -615,14 +740,16 @@ function log_in () {
 	    account = addrs[ 0 ]
 	    contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address )
 	    market   = new web3.eth.Contract( MARKET.abi,   MARKET.address   )
+	    paw      = new web3.eth.Contract( PAW.abi,      PAW.address      )
+	    minter   = new web3.eth.Contract( MINTER.abi,   MINTER.address   )
+	    royalty  = new web3.eth.Contract( ROYALTY.abi,  ROYALTY.address  )
+	    charity  = new web3.eth.Contract( CHARITY.abi,  CHARITY.address  )
 	    update_user_data()
-	}).catch(  function (e) {
+	}).catch( function (e) {
 	    log_out()
 	})
 
 }
-
-
 
 function log_out () {
     
@@ -631,8 +758,6 @@ function log_out () {
     console.log('how we get here')
 }
 
-
-
 function update_user_data() {
 
     web3.eth.getAccounts().then( function ( account_address ) {
@@ -640,15 +765,21 @@ function update_user_data() {
 	if (  account_address[ 0 ] != account_address  ) throw "Account adress is changed"
 
 	web3.eth.getBalance( account ).then( function ( eth_balance ) {
+	    
 	    contract.methods.balanceOf( account ).call().then( function ( nft_balance ) {
 
-		let balance_eth = ( +eth_balance / 10**18 ).toFixed( 6 )
-		let balance_nft = nft_balance
-		
-		d3.select("#user-account-menu__eth").text( balance_eth );
-		d3.select("#user-account-menu__nft").text( balance_nft );
-		
-		setTimeout( update_user_data, 15 * 1000 )
+		paw.methods.balanceOf(account).call().then(function (paw_balance) {
+
+		    let balance_eth = ( +eth_balance / 10**18 ).toFixed( 6 )
+		    let balance_nft = nft_balance
+		    let balance_paw = ( +paw_balance / 10**18 ).toFixed( 0 )
+		    
+		    d3.select("#user-account-menu__eth").text( balance_eth )
+		    d3.select("#user-account-menu__nft").text( balance_nft )
+		    d3.select("#user-account-menu__paw").text( balance_paw )
+		    
+		    setTimeout( update_user_data, 15 * 1000 )
+		})
 	    })
 	})
 
@@ -704,24 +835,23 @@ function openShop() {
 			<div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price">${  c[i].price / 10 ** 18 }</span></div>
 		    </div>
                     <div id="sale-item__buttons">
-			<button class="button" onclick="buyNFT( '${i}' )">Buy</buttom>
+			<button class="button" onclick="buyNFT( '${i}' )">Approve & Buy</buttom>
 		    </div>
 		</div>
         `);
     }
 }
 
-function buyNFT( token_id ) {
-    
-    market.methods.buy( token_id ).send( {from: account, value: catalogue[ token_id ].price } )
-	.then( function (transaction) {
-	    open_success_message_tab( "Operation complete", "You have successfully bought NFT" )
-	})
-	.catch( function (error) {
+async function buyNFT( token_id ) {
+    try {
+	const price = await market.methods.pricelist( token_id ).call()
+	await paw.methods.approve( MARKET.address, price ).send( {from: account} )
+	await market.methods.buy( token_id ).send( {from: account} )
+	open_success_message_tab( "Operation complete", "You have successfully bought NFT" )
+    } catch( error)  {
 	    open_error_message_tab( "Operation error", "An error has been occurred during the operation" )
-	})
+    }
 }
-
 
 function openCatalogueItem( id ) {
     const c = catalogue[ id ]
@@ -751,7 +881,6 @@ function openCatalogueItem( id ) {
     }
     let description = c.metadata.dapplink.detailed_description.replace(/(?:\r\n|\r|\n)/g, '<br />')
     $( "#citem__description" ).html( description )
-    // $( "#citem__description" ).html(   $( "#citem__description" ).text().replace(/(?:\r\n|\r|\n)/g, '<br />')  )    
 }
 
 function updateCatalogue() {

@@ -75,7 +75,7 @@
 	 }
 	 /* user menu */
 	 #user-menu {
-	     width: 25rem;
+	     width: 35rem;
 	     height: 80%;
 	     /* background-color: green; */
 	     display: flex;
@@ -85,7 +85,6 @@
 	     background-color: transparent;
 	     border: 2px solid var(--white);
 	     margin-right: 1rem;
-	     /* border-radius: 10px; */
 	     height: 100%;
 	     width: 15rem;
 	     background-color: #223752;
@@ -112,9 +111,11 @@
 	 #user-account-menu__nft {
 	     color: #adde46;
 	 }
-
 	 #user-account-menu__eth {
 	     color: #f7cf6f;
+	 }
+	 #user-account-menu__paw {
+	     color: #f48443;
 	 }
 	 /* ---------------------------------------- */
 	 main {
@@ -349,6 +350,14 @@
 	 .sale-item__value-price {
 	     font-weight: bold;
 	 }
+	 #royalty__table {
+	     font-family: monospace;
+	     font-size: 1.8rem;
+	     text-align: left;
+	 }
+	 #royalty__table td,th {
+	     padding: .5rem;
+	 }
 	</style>
 	<title>Dapplink</title>
     </head>
@@ -367,6 +376,7 @@
 	    <section id="user-menu">
 		<div id="user-account-menu">
                     <div class="user-account-menu__asset">NFT: <span id="user-account-menu__nft"></span></div>
+                    <div class="user-account-menu__asset">PAW: <span id="user-account-menu__paw"></span></div>
                     <div class="user-account-menu__asset">ETH: <span id="user-account-menu__eth"></span></div>
 		</div>
 		<div id="user-login-menu">
@@ -494,18 +504,21 @@
 		    <label for="make-nft-input__token-id">NFT Token ID</label>
                     <input id="make-nft-input__token-id" type="text" readonly />
 		    
-                    <label for="make-nft-input__mint-fee">Mint fee ETH</label>
-                    <input id="make-nft-input__mint-fee" type="text" readonly />
+                    <!-- <label for="make-nft-input__mint-fee">Mint fee ETH</label>
+			 <input id="make-nft-input__mint-fee" type="text" readonly />
+			 
+			 <label for="make-nft-input__gas-price">Gas price Gwei</label>
+			 <input id="make-nft-input__gas-price" type="text" readonly />
+			 
+			 <label for="make-nft-input__estimate-gas">Estimate gas</label>
+			 <input id="make-nft-input__estimate-gas" type="text" readonly />
+			 
+			 <label for="make-nft-input__total-price">Total price ETH</label>
+			 <input id="make-nft-input__total-price" type="text" readonly /> -->
+		    <label for="make-nft-input__total-price-paw">Total price PAW</label>
+		    <input id="make-nft-input__total-price-paw" type="text" readonly />
 		    
-                    <label for="make-nft-input__gas-price">Gas price Gwei</label>
-                    <input id="make-nft-input__gas-price" type="text" readonly />
-		    
-                    <label for="make-nft-input__estimate-gas">Estimate gas</label>
-                    <input id="make-nft-input__estimate-gas" type="text" readonly />
-		    
-                    <label for="make-nft-input__total-price">Total price ETH</label>
-                    <input id="make-nft-input__total-price" type="text" readonly />
-		    
+                    <button class ="button" id="make-nft-input__approve-mint-button" disabled>Approve</button>
                     <button class ="button" id="make-nft-input__mint-button" disabled>Make</button>
 
 	    </section>
@@ -529,6 +542,7 @@
 		<button class="button" id="nft-actions-button__files"             >Files</button><br/>
 		<button class="button" id="nft-actions-button__approve"           >Approve</button><br/>
 		<button class="button" id="nft-actions-button__transfer"          >Transfer</button><br/>
+		<button class="button" id="nft-actions-button__royalty"           >Royalty</button><br/>
 		<button class="button" id="nft-actions-button__market"            >Sell</button><br/>
 		<button class="button" id="nft-actions-button__finalize"          >Finalize</button>
             </section>
@@ -627,7 +641,7 @@
 		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
 		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
 		</div>
-		<label for="user-sale__input-price">Price Eth</label>
+		<label for="user-sale__input-price">Price PAW</label>
 		<input id="user-sale__input-price" placeholder="0.00" />
 		<button class="button" id="user-sale__button-sale">Sell</button>
             </section>
@@ -646,6 +660,14 @@
 		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
 		</div>
 		<button class="button" id="user-approve-sale__button">Approve sale</button>
+            </section>
+	    <section id="tab-user-charity" class="tab">
+		<div class="tab-header__title">Select charity address</div>
+		<div class="tab-header__token-properties">
+		    <select id="user-charity-select">
+		    </select>
+		</div>
+		<button class="button" id="user-charity__select-button">Select</button>
             </section>
 	    <!-- ================================================================================ -->
             <section id="tab-files" class="tab">
@@ -694,7 +716,58 @@
 		</div>
 		<label for="unlink__input">Path to the file to unlink</label>
 		<input id="unlink__input" name="" type="text" />
-		<button class="button" id="unlink__button">Unlik</button>
+		<button class="button" id="unlink__button">Unlink</button>
+            </section>
+	    <section id="tab-royalties" class="tab">
+		<div class="tab-header__title">Royalties</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id"      class="tab-header__token-id"></div>
+		</div>
+		<button class="button" id="royalty__show"  >Show</button><br/>
+		<button class="button" id="royalty__add"   >Add</button><br/>
+		<button class="button" id="royalty__undo"  >Undo add</button><br/>
+		<button class="button" id="royalty__volume">Percent</button>
+            </section>
+	    <section id="tab-royalties__show" class="tab">
+		<div class="tab-header__title">Royalties</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id"      class="tab-header__token-id"></div>
+		</div>
+                <table id="royalty__table">
+		    <thead>
+			<tr>
+			    <th>Address</th>
+                            <th>Share</th>
+			</tr>
+		    </thead>
+		    <tbody>
+		    </tbody>
+		</table>
+		<button class="button royalty__back">Back</button>
+            </section>
+	    <section id="tab-royalty__add" class="tab">
+		<div class="tab-header__title">Add royalty getter</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<label for="royalty-add__address">Getter</label>
+		<input id="royalty-add__address" type="text" />
+		<label for="royalty-add__share">Share</label>
+		<input id="royalty-add__share" name="" type="text" />
+		<button class="button" id="royalty-add__button-set">Set</button>
+            </section>
+	    <section id="tab-royalty-percent" class="tab">
+		<div class="tab-header__title">Set royalty percent</div>
+		<div class="tab-header__token-properties">
+		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
+		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
+		</div>
+		<label for="royalty-percent__value">Percent</label>
+		<input id="royalty-percent__value" type="text" />
+		<button class="button" id="royalty-percent__set">Set</button>
             </section>
 	    <!-- ================================================================================ -->
 	    <section id="tab-message-success" class="tab">
