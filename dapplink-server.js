@@ -760,7 +760,7 @@ const DAPPLINK = {
     ]
 }
 const MARKET = {
-    address: "0x9262328132E1C5EeaebEEecC6Ce45dE25108039E",
+    address: "0xe5Bab316DF4b574E00B88403EEA2c2547F0d75e2",
     abi: [
 	{
 	    "constant": false,
@@ -1095,7 +1095,9 @@ const options = {
 */
 
 const Web3 = require('web3')
-const provider = "https://rinkeby.infura.io/v3/85f09202e82b47a0863d04c172ec7813" 
+// const provider = "https://rinkeby.inf" + "ura.io/v3/85f09202e82b47a0863d04c172ec7813" 
+// const provider = "https://rinkeby.inf" + "ura.io/v3/e30d54c5d41c4979bd8be5cb1b46f13f" 
+const provider = "https://rinkeby.inf" + "ura.io/v3/4e485cc70aea448fb3cfd599654d3f23" 
 const web3 = new Web3( provider )
 const contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address )
 const market   = new web3.eth.Contract( MARKET.abi,   MARKET.address )
@@ -1198,6 +1200,7 @@ async function spider() {
 	    domain_name = await contract.methods.domains( token_id ).call()
 	    owner       = await contract.methods.ownerOf( token_id ).call()
 	    allowance   = await contract.methods.getApproved( token_id ).call()
+	    console.log( domain_name );
 	    if ( allowance == MARKET.address ) price = await market.methods.pricelist( token_id ).call()
 
 	    NFTs[ token_id ] = {}

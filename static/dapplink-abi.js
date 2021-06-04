@@ -759,7 +759,7 @@ const DAPPLINK = {
     ]
 }
 const MARKET = {
-    address: "0x9262328132E1C5EeaebEEecC6Ce45dE25108039E",
+    address: "0xe5Bab316DF4b574E00B88403EEA2c2547F0d75e2",
     abi: [
 	{
 	    "constant": false,

@@ -681,15 +681,12 @@ async function open_make_new_nft_tab () {
 	    paw_balance  = +await paw.methods.balanceOf( account ).call()
 	    let mint_fee_readable = (mint_fee / 10 ** 18).toFixed( 0 )
 	    $( "#make-nft-input__total-price-paw" ).val( mint_fee_readable )
-	    console.table( {appr: approved_sum, fee: mint_fee, ubalance: paw_balance} );
 	    if ( (approved_sum >= mint_fee) && (paw_balance > mint_fee) ) {
-		console.log( 'case1' );
 		document.getElementById( "make-nft-input__mint-button"         ).disabled = false
 		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
 		return
 	    }
 	    if ( approved_sum < mint_fee && paw_balance > mint_fee ) {
-		console.log( 'case2' );
 		document.getElementById( "make-nft-input__mint-button"         ).disabled = true
 		document.getElementById( "make-nft-input__approve-mint-button" ).disabled = false
 		return
