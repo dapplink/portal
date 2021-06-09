@@ -1,6 +1,5 @@
 const DAPPLINK = {
-    address: "0x8DF35DA5204DA1B158E8CB936a5221a932914F4F",
-    mint_gas: 152674,
+    address: "0x9BB4303f2e9E2ae5eBC80b2Aa48A80bbb28235D4",
     abi: [
 	{
 	    "constant": false,
@@ -760,7 +759,7 @@ const DAPPLINK = {
     ]
 }
 const MARKET = {
-    address: "0xe5Bab316DF4b574E00B88403EEA2c2547F0d75e2",
+    address: "0x1036F6522D3F1b1289Eb5Ec7aAD73669407ef769",
     abi: [
 	{
 	    "constant": false,
@@ -799,10 +798,6 @@ const MARKET = {
 	    "inputs": [
 		{
 		    "name": "_token_id",
-		    "type": "uint256"
-		},
-		{
-		    "name": "_price",
 		    "type": "uint256"
 		}
 	    ],
@@ -865,7 +860,7 @@ const MARKET = {
 		    "type": "address"
 		},
 		{
-		    "name": "_royalty_contract",
+		    "name": "_residue_contract",
 		    "type": "address"
 		},
 		{
@@ -1088,10 +1083,10 @@ const axios             = require( "axios"                     );
 const HDWalletProvider  = require( "truffle-hdwallet-provider" );
 
 /*
-const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/privkey.pem')
-};
+  const options = {
+  cert: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/dapplink.org/privkey.pem')
+  };
 */
 
 const Web3 = require('web3')
@@ -1109,16 +1104,16 @@ app.use( cors() );
 app.listen( 80 ); 
 // https.createServer( options, app ).listen( 443 );
 /*
-TODO: refactor to dev/production mode switch
+  TODO: refactor to dev/production mode switch
 
-(function force_https() {
-    const redirect = express();
-    redirect.get('*', function(req, res) {  
-	res.redirect('https://' + req.headers.host + req.url);
-	// res.redirect('https://example.com' + req.url);
-    })
-    redirect.listen( 80 )
-})();
+  (function force_https() {
+  const redirect = express();
+  redirect.get('*', function(req, res) {  
+  res.redirect('https://' + req.headers.host + req.url);
+  // res.redirect('https://example.com' + req.url);
+  })
+  redirect.listen( 80 )
+  })();
 */
 
 app.use( morgan( "dev" ) ); // TODO refactor

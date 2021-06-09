@@ -350,12 +350,12 @@
 	 .sale-item__value-price {
 	     font-weight: bold;
 	 }
-	 #royalty__table {
+	 #residue__table {
 	     font-family: monospace;
 	     font-size: 1.8rem;
 	     text-align: left;
 	 }
-	 #royalty__table td,th {
+	 #residue__table td,th {
 	     padding: .5rem;
 	 }
 	</style>
@@ -542,7 +542,7 @@
 		<button class="button" id="nft-actions-button__files"             >Files</button><br/>
 		<button class="button" id="nft-actions-button__approve"           >Approve</button><br/>
 		<button class="button" id="nft-actions-button__transfer"          >Transfer</button><br/>
-		<button class="button" id="nft-actions-button__royalty"           >Residuals</button><br/>
+		<button class="button" id="nft-actions-button__residue"           >Residuals</button><br/>
 		<button class="button" id="nft-actions-button__market"            >Sell</button><br/>
 		<button class="button" id="nft-actions-button__finalize"          >Finalize</button>
             </section>
@@ -718,24 +718,24 @@
 		<input id="unlink__input" name="" type="text" />
 		<button class="button" id="unlink__button">Unlink</button>
             </section>
-	    <section id="tab-royalties" class="tab">
+	    <section id="tab-residuals" class="tab">
 		<div class="tab-header__title">Residuals</div>
 		<div class="tab-header__token-properties">
 		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
 		    <div  id="user-nft-properties__token-id"      class="tab-header__token-id"></div>
 		</div>
-		<button class="button" id="royalty__show"  >Show</button><br/>
-		<button class="button" id="royalty__add"   >Add</button><br/>
-		<button class="button" id="royalty__undo"  >Undo add</button><br/>
-		<button class="button" id="royalty__volume">Percent</button>
+		<button class="button" id="residue__show"  >Show</button><br/>
+		<button class="button" id="residue__add"   >Add</button><br/>
+		<button class="button" id="residue__undo"  >Undo add</button><br/>
+		<button class="button" id="residue__volume">Percent</button>
             </section>
-	    <section id="tab-royalties__show" class="tab">
+	    <section id="tab-residuals__show" class="tab">
 		<div class="tab-header__title">Residuals</div>
 		<div class="tab-header__token-properties">
 		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
 		    <div  id="user-nft-properties__token-id"      class="tab-header__token-id"></div>
 		</div>
-                <table id="royalty__table">
+                <table id="residue__table">
 		    <thead>
 			<tr>
 			    <th>Address</th>
@@ -745,29 +745,29 @@
 		    <tbody>
 		    </tbody>
 		</table>
-		<button class="button royalty__back">Back</button>
+		<button class="button residue__back">Back</button>
             </section>
-	    <section id="tab-royalty__add" class="tab">
+	    <section id="tab-residue__add" class="tab">
 		<div class="tab-header__title">Add residuals getter</div>
 		<div class="tab-header__token-properties">
 		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
 		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
 		</div>
-		<label for="royalty-add__address">Getter</label>
-		<input id="royalty-add__address" type="text" />
-		<label for="royalty-add__share">Share</label>
-		<input id="royalty-add__share" name="" type="text" />
-		<button class="button" id="royalty-add__button-set">Set</button>
+		<label for="residue-add__address">Getter</label>
+		<input id="residue-add__address" type="text" />
+		<label for="residue-add__share">Share</label>
+		<input id="residue-add__share" name="" type="text" />
+		<button class="button" id="residue-add__button-set">Set</button>
             </section>
-	    <section id="tab-royalty-percent" class="tab">
+	    <section id="tab-residue-percent" class="tab">
 		<div class="tab-header__title">Set residuals percent</div>
 		<div class="tab-header__token-properties">
 		    <span id="user-nft-properties__token-domain"  class="tab-header__domain"></span>
 		    <div  id="user-nft-properties__token-id" class="tab-header__token-id"></div>
 		</div>
-		<label for="royalty-percent__value">Percent</label>
-		<input id="royalty-percent__value" type="text" />
-		<button class="button" id="royalty-percent__set">Set</button>
+		<label for="residue-percent__value">Percent</label>
+		<input id="residue-percent__value" type="text" />
+		<button class="button" id="residue-percent__set">Set</button>
             </section>
 	    <!-- ================================================================================ -->
 	    <section id="tab-message-success" class="tab">

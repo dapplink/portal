@@ -1,5 +1,5 @@
 const DAPPLINK = {
-    address: "0x8DF35DA5204DA1B158E8CB936a5221a932914F4F",
+    address: "0x9BB4303f2e9E2ae5eBC80b2Aa48A80bbb28235D4",
     abi: [
 	{
 	    "constant": false,
@@ -759,220 +759,216 @@ const DAPPLINK = {
     ]
 }
 const MARKET = {
-    address: "0xe5Bab316DF4b574E00B88403EEA2c2547F0d75e2",
+    address: "0x1036F6522D3F1b1289Eb5Ec7aAD73669407ef769",
     abi: [
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		},
-		{
-		    "name": "_price",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "add_sale",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			},
+			{
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "add_sale",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "buy",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			}
+		],
+		"name": "buy",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		},
-		{
-		    "name": "_price",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "cancel_sale",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cancel_sale",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_admin",
-		    "type": "address"
-		}
-	    ],
-	    "name": "set_admin",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_admin",
+				"type": "address"
+			}
+		],
+		"name": "set_admin",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_fee",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "set_listing_fee",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_fee",
+				"type": "uint256"
+			}
+		],
+		"name": "set_listing_fee",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_profit_getter",
-		    "type": "address"
-		}
-	    ],
-	    "name": "set_profit_getter",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_profit_getter",
+				"type": "address"
+			}
+		],
+		"name": "set_profit_getter",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "inputs": [
-		{
-		    "name": "_dapplink_contract",
-		    "type": "address"
-		},
-		{
-		    "name": "_charity_contract",
-		    "type": "address"
-		},
-		{
-		    "name": "_royalty_contract",
-		    "type": "address"
-		},
-		{
-		    "name": "_paw_contract",
-		    "type": "address"
-		},
-		{
-		    "name": "_profit_getter",
-		    "type": "address"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "constructor"
+		"inputs": [
+			{
+				"name": "_dapplink_contract",
+				"type": "address"
+			},
+			{
+				"name": "_charity_contract",
+				"type": "address"
+			},
+			{
+				"name": "_residue_contract",
+				"type": "address"
+			},
+			{
+				"name": "_paw_contract",
+				"type": "address"
+			},
+			{
+				"name": "_profit_getter",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "admin",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "address"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "admin",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "charity_permille",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "charity_permille",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "listing_fee",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "listing_fee",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "pricelist",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "pricelist",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "profit_getter",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "address"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "profit_getter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "sale_fee_permille",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "sale_fee_permille",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
-    ]
+]
 }
 const PAW = {
-    address: "0x9F5F639051aCDF3598E391CA8697283dF0BE992D",
+    address: "0xD14f977512250dCE566ca7568eB6A084078e0b23",
     abi: [
 	{
 	    "constant": false,
@@ -1215,7 +1211,7 @@ const PAW = {
     ]
 }
 const MINTER = {
-    address: "0xB8aD2dF019B7AB139926210308960EC94577c35c",
+    address: "0x8e0568269cafaa3D0C66A0668599fBC761cD961C",
     abi: [
 	{
 	    "constant": false,
@@ -1415,176 +1411,176 @@ const MINTER = {
 	}
     ]
 }
-const ROYALTY = {
-    address: "0xa33a4db7466faFf4728355c01e5EBca445F6e739",
+const RESIDUE = {
+    address: "0x18e49FBA79e283277d1919C286066E85F03f5fC4",
     abi: [
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		},
-		{
-		    "name": "_beneficiary",
-		    "type": "address"
-		},
-		{
-		    "name": "_share",
-		    "type": "uint8"
-		}
-	    ],
-	    "name": "add_beneficiary",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			},
+			{
+				"name": "_beneficiary",
+				"type": "address"
+			},
+			{
+				"name": "_share",
+				"type": "uint8"
+			}
+		],
+		"name": "add_beneficiary",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "remove_last_beneficiary",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			}
+		],
+		"name": "remove_last_beneficiary",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "constant": false,
-	    "inputs": [
-		{
-		    "name": "_token_id",
-		    "type": "uint256"
-		},
-		{
-		    "name": "_royalty_percent",
-		    "type": "uint8"
-		}
-	    ],
-	    "name": "set_royalty_percent",
-	    "outputs": [],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "function"
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_token_id",
+				"type": "uint256"
+			},
+			{
+				"name": "_residue_percent",
+				"type": "uint8"
+			}
+		],
+		"name": "set_residue_percent",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-	    "inputs": [
-		{
-		    "name": "_dapplink_contract",
-		    "type": "address"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "nonpayable",
-	    "type": "constructor"
+		"inputs": [
+			{
+				"name": "_dapplink_contract",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		},
-		{
-		    "name": "",
-		    "type": "uint8"
-		}
-	    ],
-	    "name": "beneficiaries",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "address"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "beneficiaries",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "number_of_beneficiaries",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint8"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "number_of_beneficiaries",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "name": "royalty_percent",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint8"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "residue_percent",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [],
-	    "name": "royalty_percent_limit",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [],
+		"name": "residue_percent_limit",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-	    "constant": true,
-	    "inputs": [
-		{
-		    "name": "",
-		    "type": "uint256"
-		},
-		{
-		    "name": "",
-		    "type": "uint8"
-		}
-	    ],
-	    "name": "share_of_beneficiary",
-	    "outputs": [
-		{
-		    "name": "",
-		    "type": "uint8"
-		}
-	    ],
-	    "payable": false,
-	    "stateMutability": "view",
-	    "type": "function"
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "share_of_beneficiary",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
-    ]
+]
 }
 const CHARITY = {
-    address: "0x3a246277D79C90EdcCe24ef9ceC37425b0c75642",
+    address: "0x9Ada92d55cD220F74bc3D1a7702032e2811F3040",
     abi: [
 	{
 	    "constant": false,

@@ -1,4 +1,4 @@
-let contract, account, web3, market, paw, minter, royalty, charity
+let contract, account, web3, market, paw, minter, residue, charity
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 const CHUNK = 25000
 let file, filesha, filemime, filesize, uripath, chunks
@@ -38,9 +38,9 @@ async function open_user_nft_tab () {
 		document.getElementById( "nft-actions-button__files"    ).disabled = false
 		document.getElementById( "nft-actions-button__finalize" ).disabled = false
 		
-		document.getElementById( "royalty__add"         ).disabled = false
-		document.getElementById( "royalty__undo"        ).disabled = false
-		document.getElementById( "royalty-percent__set" ).disabled = false
+		document.getElementById( "residue__add"         ).disabled = false
+		document.getElementById( "residue__undo"        ).disabled = false
+		document.getElementById( "residue-percent__set" ).disabled = false
 
 		document.getElementById( "user-nft-properties__button_upload" ).disabled = false
 		
@@ -49,9 +49,9 @@ async function open_user_nft_tab () {
 		    document.getElementById( "nft-actions-button__files"    ).disabled = true
 		    document.getElementById( "nft-actions-button__finalize" ).disabled = true
 
-		    document.getElementById( "royalty__add"         ).disabled = true
-		    document.getElementById( "royalty__undo"        ).disabled = true
-		    document.getElementById( "royalty-percent__set" ).disabled = true
+		    document.getElementById( "residue__add"         ).disabled = true
+		    document.getElementById( "residue__undo"        ).disabled = true
+		    document.getElementById( "residue-percent__set" ).disabled = true
 
 		    document.getElementById( "user-nft-properties__button_upload" ).disabled = true
 		}
@@ -377,30 +377,30 @@ async function open_user_nft_tab () {
 		    })
 		})
 
-		d3.select( "#nft-actions-button__royalty" ).on( "click", async function() {
+		d3.select( "#nft-actions-button__residue" ).on( "click", async function() {
 		    $( ".tab" ).hide()
-		    $( "#tab-royalties" ).show()
+		    $( "#tab-residuals" ).show()
 		    const is_token_closed = await contract.methods.closed( tokens[i] ).call()
 		    if (is_token_closed) {
-			document.getElementById( "royalty__add"  ).disabled = true
-			document.getElementById( "royalty__undo" ).disabled = true
+			document.getElementById( "residue__add"  ).disabled = true
+			document.getElementById( "residue__undo" ).disabled = true
 		    }
 		    
 		})
 
-		d3.select( "#royalty__show" ).on( "click", async function () {
+		d3.select( "#residue__show" ).on( "click", async function () {
 		    $( ".tab" ).hide()
-		    $( "#tab-royalties__show" ).show()
+		    $( "#tab-residuals__show" ).show()
 		    const beneficiaries = []
 		    try {
-			let number_of_beneficiaries = await royalty.methods.number_of_beneficiaries( tokens[i] ).call()
+			let number_of_beneficiaries = await residue.methods.number_of_beneficiaries( tokens[i] ).call()
 			for (let j = 1; j <= number_of_beneficiaries; j++) {
-			    let beneficiary = await royalty.methods.beneficiaries( tokens[i], j ).call()
-			    let share       = await royalty.methods.share_of_beneficiary( tokens[i], j ).call()
+			    let beneficiary = await residue.methods.beneficiaries( tokens[i], j ).call()
+			    let share       = await residue.methods.share_of_beneficiary( tokens[i], j ).call()
 			    beneficiaries.push( {beneficiary: beneficiary, share: share} )
 			}
-			d3.select( "#royalty__table").select( "tbody" ).selectAll( "tr" ).remove()
-			d3.select( "#royalty__table" )
+			d3.select( "#residue__table").select( "tbody" ).selectAll( "tr" ).remove()
+			d3.select( "#residue__table" )
 			    .select( "tbody" )
 			    .selectAll( "tr" )
 			    .data( beneficiaries )
@@ -411,58 +411,58 @@ async function open_user_nft_tab () {
 			open_error_message_tab();
 		    }
 		})
-		d3.select( ".royalty__back" ).on( "click", function() {
+		d3.select( ".residue__back" ).on( "click", function() {
 		    $( ".tab" ).hide()
-		    $( "#tab-royalties" ).show()
+		    $( "#tab-residuals" ).show()
 		}) 
-		d3.select( "#royalty__add" ).on( "click", async function () {
+		d3.select( "#residue__add" ).on( "click", async function () {
 		    $( ".tab" ).hide()
-		    $( "#royalty-add__address" ).val( "" )
-		    $( "#royalty-add__share"   ).val( "" )
-		    $( "#tab-royalty__add" ).show()
+		    $( "#residue-add__address" ).val( "" )
+		    $( "#residue-add__share"   ).val( "" )
+		    $( "#tab-residue__add" ).show()
 		})
-		d3.select( "#royalty-add__button-set" ).on( "click", async function() {
+		d3.select( "#residue-add__button-set" ).on( "click", async function() {
 		    let beneficiary = {
-			address: $( "#royalty-add__address" ).val(),
-			share: $( "#royalty-add__share" ).val()
+			address: $( "#residue-add__address" ).val(),
+			share: $( "#residue-add__share" ).val()
 		    }
 		    try {
-			await royalty.methods.add_beneficiary( tokens[i], beneficiary.address, beneficiary.share ).send( {from: account} )
+			await residue.methods.add_beneficiary( tokens[i], beneficiary.address, beneficiary.share ).send( {from: account} )
 			$( ".tab" ).hide()
 			open_success_message_tab( "Operation complete", "Beneficiary has been successfully added" )
 		    } catch(e) {
 			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
 		    }
 		})
-		d3.select( "#royalty__undo" ).on( "click", async function () {
+		d3.select( "#residue__undo" ).on( "click", async function () {
 		    try {
-			await royalty.methods.remove_last_beneficiary( tokens[i] ).send( {from: account} )
-			open_success_message_tab( "Operation complete", "Last added beneficiary has been successfully removed from royalty list" )
+			await residue.methods.remove_last_beneficiary( tokens[i] ).send( {from: account} )
+			open_success_message_tab( "Operation complete", "Last added beneficiary has been successfully removed from residue list" )
 		    } catch(e){
 			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
 		    }
 		})
-		d3.select( "#royalty__volume" ).on( "click", async function () {
+		d3.select( "#residue__volume" ).on( "click", async function () {
 		    $( ".tab" ).hide()
-		    $( "#tab-royalty-percent" ).show()
+		    $( "#tab-residue-percent" ).show()
 		    const is_token_closed = await contract.methods.closed( tokens[i] ).call()
 		    is_token_closed
-			? document.getElementById( "royalty-percent__set" ).disabled = true
-			: document.getElementById( "royalty-percent__set" ).disabled = false
+			? document.getElementById( "residue-percent__set" ).disabled = true
+			: document.getElementById( "residue-percent__set" ).disabled = false
 		    let current_percent
 		    try {
-			current_percent = await royalty.methods.royalty_percent( tokens[i] ).call()
-			$( "#royalty-percent__value" ).val( current_percent )
+			current_percent = await residue.methods.residue_percent( tokens[i] ).call()
+			$( "#residue-percent__value" ).val( current_percent )
 		    } catch(e) {
 			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
 		    }
 		    
 		})
-		d3.select( "#royalty-percent__set" ).on( "click", async function() {
-		    let percent = $( "#royalty-percent__value" ).val()
+		d3.select( "#residue-percent__set" ).on( "click", async function() {
+		    let percent = $( "#residue-percent__value" ).val()
 		    try {
-			await royalty.methods.set_royalty_percent( tokens[i], percent ).send( {from: account} )
-			open_success_message_tab( "Operation complete", "Royalty percent has been set" )
+			await residue.methods.set_residue_percent( tokens[i], percent ).send( {from: account} )
+			open_success_message_tab( "Operation complete", "Residue percent has been set" )
 		    } catch(e) {
 			open_error_message_tab( "Operation error", "An error has been occurred during operation" )
 		    }
@@ -751,7 +751,7 @@ function log_in () {
 	    market   = new web3.eth.Contract( MARKET.abi,   MARKET.address   )
 	    paw      = new web3.eth.Contract( PAW.abi,      PAW.address      )
 	    minter   = new web3.eth.Contract( MINTER.abi,   MINTER.address   )
-	    royalty  = new web3.eth.Contract( ROYALTY.abi,  ROYALTY.address  )
+	    residue  = new web3.eth.Contract( RESIDUE.abi,  RESIDUE.address  )
 	    charity  = new web3.eth.Contract( CHARITY.abi,  CHARITY.address  )
 	    update_user_data()
 	}).catch( function (e) {
