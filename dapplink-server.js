@@ -1154,6 +1154,7 @@ async function vhostHandler( req, res, next ) {
 	    .send( `<h1>Smart contract: Invalid address for token_id: ${token_id}</h1>` )
 	return
     }
+    // TODO handle cases when file is uploaded but not linked
     res.header("Access-Control-Allow-Origin", "*")
     contract
 	.methods.files( token_id, uripath_sha )
@@ -1196,11 +1197,11 @@ async function spider() {
 
 	    if ( allowance == MARKET.address ) price = await market.methods.pricelist( token_id ).call()
 
-	    NFTs[ token_id ] = {}
+	    if ( ! NFTs[ token_id ] ) NFTs[ token_id ] = {}
 	    NFTs[ token_id ].domain_name = domain_name
 	    NFTs[ token_id ].owner = owner
 	    NFTs[ token_id ].price = +price ? price : null
-	    NFTs[ token_id ].metadata = null
+
 	    try {
 		const r = ( await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} ) ).data
 		if( typeof r.properties.name.description	!== 'string' ) throw 'structure error'
@@ -1219,9 +1220,12 @@ async function spider() {
 		if( typeof r.dapplink.preview_0			!== 'string' ) throw 'structure error'
 		if( typeof r.dapplink.detailed_description	!== 'string' ) throw 'structure error'
 		NFTs[ token_id ].metadata = r
-	    } catch (e) {}
+	    } catch (e) {
+		NFTs[ token_id ].metadata = null
+		// console.log( 'Fetch meta error: ' + domain_name );
+	    }
 	} catch (e) {
-	    console.log( 'Error with token index: ' + i );
+	    // console.log( 'Error with token index: ' + i );
 	    continue
 	}
     }
