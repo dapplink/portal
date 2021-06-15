@@ -1127,6 +1127,9 @@ app.get( "/list", function ( req, res ) {
     res.end( JSON.stringify( NFTs, 0, 2 ))
 })
 
+function is_correct_nft_domain_name (domain_name) {
+    return /^[a-z][a-z0-9]{0,128}$/.test(domain_name)
+}
 
 async function vhostHandler( req, res, next ) {
     // req.vhost.hostname = "something.localhost
@@ -1192,6 +1195,9 @@ async function spider() {
 	try {
 	    token_id    = await contract.methods.tokenByIndex( i ).call()
 	    domain_name = await contract.methods.domains( token_id ).call()
+	    
+	    if (  !is_correct_nft_domain_name( domain_name )  ) continue 
+
 	    owner       = await contract.methods.ownerOf( token_id ).call()
 	    allowance   = await contract.methods.getApproved( token_id ).call()
 

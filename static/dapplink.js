@@ -5,6 +5,10 @@ let file, filesha, filemime, filesize, uripath, chunks
 const HOST = 'localhost'
 let catalogue = {}
 
+function is_correct_nft_domain_name (domain_name) {
+    return /^[a-z][a-z0-9]{0,128}$/.test(domain_name)
+}
+
 async function open_user_nft_tab () {
     $( ".tab" ).hide() 
     $( "#tab-user-nft" ).show()
@@ -624,8 +628,7 @@ function open_send_eth_tab () {
 	is_address_field_correct    = false
 	is_nft_domain_field_correct = false
 	let domain_name = document.getElementById( "send-eth__domain" ).value
-	let is_correct_nft_domain_name = /^[a-z0-9]+$/.test( domain_name ) // TODO allow hyphens, prevent start from digit and 0x
-	if ( is_correct_nft_domain_name ) {
+	if (  is_correct_nft_domain_name( domain_name )  ) {
 	    let token_id = web3.utils.hexToNumberString(  web3.utils.keccak256( domain_name )  )
 	    let address_for_domain = await contract.methods.ownerOf( token_id ).call()
 	    let is_nft_domain_exists = address_for_domain !== ZERO_ADDRESS
@@ -666,16 +669,16 @@ async function open_make_new_nft_tab () {
     document.getElementById( "make-nft-input__domain" ).addEventListener( "input", async function () {
 	domain_name = $( "#make-nft-input__domain" ).val()
 	document.getElementById( "make-nft-input__mint-button" ).disabled = true;
-	let is_correct_nft_domain_name = /^[a-z0-9]+$/.test( domain_name )
-	if ( !is_correct_nft_domain_name ) {
+	document.getElementById( "make-nft-input__approve-mint-button" ).disabled = true
+	if (  !is_correct_nft_domain_name( domain_name )  ) {
 	    $( "#make-nft-input__token-id" ).val( "" )
 	    return
 	}
 	let token_id = web3.utils.hexToNumberString(  web3.utils.keccak256( domain_name )  )
 	$( "#make-nft-input__token-id" ).val( token_id )
-	let is_nft_domain_exists = await contract.methods.ownerOf( token_id ).call() == ZERO_ADDRESS
-	if ( !is_nft_domain_exists ) return
 	try {
+	    let is_nft_domain_not_exists = await contract.methods.ownerOf( token_id ).call() == ZERO_ADDRESS
+	    if ( !is_nft_domain_not_exists ) return
 	    mint_fee     = +await minter.methods.get_total_price( domain_name ).call()
 	    approved_sum = +await paw.methods.allowance( account, MINTER.address ).call()
 	    paw_balance  = +await paw.methods.balanceOf( account ).call()
