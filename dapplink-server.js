@@ -1071,7 +1071,6 @@ let SHA1Generator = {
 const https		= require( "https"		       );
 const fs		= require( "fs"			       );
 const path		= require( "path"		       );
-const asyn		= require( "async"		       );
 const express		= require( "express"		       );
 const morgan		= require( "morgan"		       );
 const bodyParser	= require( "body-parser"	       );
