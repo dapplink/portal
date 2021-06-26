@@ -1,0 +1,36 @@
+{
+    "name": "dapplink-org",
+    "version": "0.0.1",
+    "description": "Dapplink.org",
+    "main": "dapplink-server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "replace": "sed -i 's/localhost/dapplink.org/g' dapplink-server.js; sed -i 's/localhost/dapplink.org/g' static/dapplink.js",
+        "server": "node dapplink-server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dapplink/portal.git"
+    },
+    "keywords": [
+        "dapplink",
+        "ethereum",
+        "nft",
+        "blockchain"
+    ],
+    "bugs": {
+        "url": "https://github.com/dapplink/portal/issues"
+    },
+    "homepage": "https://github.com/dapplink/portal#readme",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.5",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "truffle-hdwallet-provider": "^1.0.17",
+        "vhost": "^3.0.2",
+        "web3": "^1.3.6"
+    }
+}
