@@ -1076,7 +1076,7 @@ const morgan		= require( "morgan"		       );
 const bodyParser	= require( "body-parser"	       );
 const cookieParser	= require( "cookie-parser"	       );
 const cors		= require( "cors"		       );
-const multer		= require( "multer"		       );
+// const multer		= require( "multer"		       );
 const vhost		= require( "vhost"		       );
 const axios             = require( "axios"                     );
 const HDWalletProvider  = require( "truffle-hdwallet-provider" );
@@ -1144,11 +1144,10 @@ async function vhostHandler( req, res, next ) {
     let domain_name = req.vhost.hostname.substr(  0,  req.vhost.hostname.indexOf( "." + HOST )  )
     let uripath = q.substr(1)
     if ( uripath == "" ) uripath = "index.html"
-    let uripath_sha = SHA1Generator.calcSHA1( uripath )
+    // let uripath_sha = SHA1Generator.calcSHA1( uripath )
+    let uripath_sha = '0x' + SHA1Generator.calcSHA1( uripath )
     let token_id = web3.utils.hexToNumberString(  web3.utils.keccak256( domain_name )  )
-
     let address_for_domain = await contract.methods.ownerOf( token_id ).call()
-
     let is_nft_domain_exists = address_for_domain !== ZERO_ADDRESS
     if ( !is_nft_domain_exists ) {
 	res
