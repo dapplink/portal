@@ -1079,7 +1079,7 @@ const cors		= require( "cors"		       );
 // const multer		= require( "multer"		       );
 const vhost		= require( "vhost"		       );
 const axios             = require( "axios"                     );
-// const HDWalletProvider  = require( "truffle-hdwallet-provider" );
+const HDWalletProvider  = require( "truffle-hdwallet-provider" );
 
 /*
   const options = {
