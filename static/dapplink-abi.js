@@ -1211,7 +1211,7 @@ const PAW = {
     ]
 }
 const MINTER = {
-    address: "0x8e0568269cafaa3D0C66A0668599fBC761cD961C",
+    address: "0xeAec21f17d77bFE2e12213D161b21066F7b08029",
     abi: [
 	{
 	    "constant": false,
