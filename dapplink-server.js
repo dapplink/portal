@@ -1092,7 +1092,7 @@ const web3 = new Web3( provider )
 const contract = new web3.eth.Contract( DAPPLINK.abi, DAPPLINK.address )
 const market   = new web3.eth.Contract( MARKET.abi,   MARKET.address )
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
-const NFTs = {}
+let NFTs = {}
 const app = express();
 
 app.use(  vhost( "*." + HOST, vhostHandler )  )
@@ -1183,7 +1183,8 @@ async function vhostHandler( req, res, next ) {
 }
 
 async function spider() {
-    
+
+    const tempNFTs = {}
     const total_supply = await contract.methods.totalSupply().call()
     
     for (let i = 1; i <= total_supply; i++) {
@@ -1193,16 +1194,16 @@ async function spider() {
 	    domain_name = await contract.methods.domains( token_id ).call()
 	    
 	    if (  !is_correct_nft_domain_name( domain_name )  ) continue 
-
+	    
 	    owner       = await contract.methods.ownerOf( token_id ).call()
 	    allowance   = await contract.methods.getApproved( token_id ).call()
 
 	    if ( allowance == MARKET.address ) price = await market.methods.pricelist( token_id ).call()
 
-	    if ( ! NFTs[ token_id ] ) NFTs[ token_id ] = {}
-	    NFTs[ token_id ].domain_name = domain_name
-	    NFTs[ token_id ].owner = owner
-	    NFTs[ token_id ].price = +price ? price : null
+	    if ( ! tempNFTs[ token_id ] ) tempNFTs[ token_id ] = {}
+	    tempNFTs[ token_id ].domain_name = domain_name
+	    tempNFTs[ token_id ].owner = owner
+	    tempNFTs[ token_id ].price = +price ? price : null
 
 	    try {
 		const r = ( await axios.get( 'http://127.0.0.1/nft.json', {headers:{Host: `${domain_name}.${HOST}`}} ) ).data
@@ -1221,9 +1222,9 @@ async function spider() {
 		if( typeof r.dapplink.preview_9			!== 'string' ) throw 'structure error'
 		if( typeof r.dapplink.preview_0			!== 'string' ) throw 'structure error'
 		if( typeof r.dapplink.detailed_description	!== 'string' ) throw 'structure error'
-		NFTs[ token_id ].metadata = r
+		tempNFTs[ token_id ].metadata = r
 	    } catch (e) {
-		NFTs[ token_id ].metadata = null
+		tempNFTs[ token_id ].metadata = null
 		// console.log( 'Fetch meta error: ' + domain_name );
 	    }
 	} catch (e) {
@@ -1231,6 +1232,7 @@ async function spider() {
 	    continue
 	}
     }
+    NFTs = { ...tempNFTs }
     setTimeout( spider, 10 * 1000 )
 }
 

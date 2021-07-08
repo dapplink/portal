@@ -22,7 +22,7 @@ async function open_user_nft_tab () {
 	    .data( domains )
 	    .enter()
 	    .append( "li" )
-	    .html( ( d,i ) =>
+	    .html( ( d, i ) =>
 		   `<div class="user-nft__token-container">` +
 		   `    <div class="user-nft__token-index">${i}</div>` +
 		   `    <div class="user-nft__token-properties">` +
