@@ -1159,6 +1159,8 @@ async function vhostHandler( req, res, next ) {
 	.methods.files( token_id, uripath_sha )
 	.call()
 	.then( async function ( file ) {
+	    // TODO add error handler
+	    // if ( uripath == "Document.html" ) console.log( JSON.stringify( file, 0, 2 ) ); // <-----------------------------
 	    let da = new Array ( file.n_chunks )
 	    try {
 		for( let i = 0; i < file.n_chunks; i++ ) {
@@ -1169,6 +1171,7 @@ async function vhostHandler( req, res, next ) {
 		    }
 		    let log = await contract.getPastEvents( "Chunk", {fromBlock:0, toBlock: 'latest', "filter": filter} )
 		    da[ i ] = log[ 0 ].returnValues.chunk_data.substr(2)
+		    // if ( uripath == "Document.html" ) console.log('Here'); // <-----------------------------
 		}
 		let data = new Buffer.from(  da.join( "" ), "hex"  )
 		res.writeHead( 200, {
@@ -1177,9 +1180,9 @@ async function vhostHandler( req, res, next ) {
 		})
 		res.end( data )
 	    } catch( e ) {
-		res.status( 404 ).send(`<pre>${e}</pre>`)
+		res.status( 404 ).send(`<pre>${e}</pre>`) /// TODO put 404 message
 	    }
-	})
+	}) // .catch( error => { console.log('========================='); console.log( error ); console.log('========================='); })
 }
 
 async function spider() {
