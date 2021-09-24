@@ -368,7 +368,7 @@
 		<div class="main-menu__link" id="main-menu__help"      ><i class="material-icons main-menu__icon">help</i></div>
 		<div class="main-menu__link" id="main-menu__downloads" ><i class="material-icons main-menu__icon">file_download</i></div>
 		<div class="main-menu__link" id="main-menu__shop"      ><i class="material-icons main-menu__icon">shopping_cart</i></div>
-		<div class="main-menu__link" id="main-menu__shop"      ><i class="material-icons main-menu__icon">storefront</i></div>
+		<div class="main-menu__link" id="main-menu__goods"     ><i class="material-icons main-menu__icon">storefront</i></div>
 		<div class="main-menu__link" id="main-menu__www"       >WWW</div>
 		<div class="main-menu__link" id="main-menu__dpwa"      >DPWA</div>
 		<div class="main-menu__link" id="main-menu__art"       >ART</div>
@@ -419,6 +419,20 @@
 	    </section>
             <section id="tab-shop" class="tab">
 		<div class="tab-header__title">Shop</div>
+                <!-- <div class="sale-item">
+                     <div class="sale-item__properties">
+		     <div><span class="sale-item__label-domain">Domain:  </span><span class="sale-item__value-domain"> </span></div>
+		     <div><span class="sale-item__label-id">Token ID:</span><span class="sale-item__value-id"> </span></div>
+		     <div><span class="sale-item__label-owner">Owner:   </span><span class="sale-item__value-owner"> </span></div>
+		     <div><span class="sale-item__label-price">Price:   </span><span class="sale-item__value-price"> </span></div>
+		     </div>
+                     <div id="sale-item__buttons">
+		     <button class="button">Buy</buttom>
+		     </div>
+		     </div> -->
+	    </section>
+	    <section id="tab-goods" class="tab">
+		<div class="tab-header__title">Goods</div>
                 <!-- <div class="sale-item">
                      <div class="sale-item__properties">
 		     <div><span class="sale-item__label-domain">Domain:  </span><span class="sale-item__value-domain"> </span></div>
@@ -559,13 +573,21 @@
 		<input id="user-nft-properties__token-description" type="text" value=""/>
 		<label for="user-nft-properties__token-type">Token type</label>
 		<select id="user-nft-properties__token-type" id="" name="">
-                    <option value="www" >WWW</option>
-                    <option value="dpwa">DPWA</option>
-                    <option value="art" >ART</option>
-                    <option value="apk" >APK</option>
+                    <option value="www"   >WWW</option>
+                    <option value="dpwa"  >DPWA</option>
+                    <option value="art"   >ART</option>
+                    <option value="apk"   >APK</option>
+		    <option value="goods" >Goods</option>
 		</select>
-		<label for="user-nft-properties__token-image">URI</label>
-		<input id="user-nft-properties__token-image" type="text" />
+		<label for="user-nft-goods__category" class="goods-option">Goods category</label>
+		<select id="user-nft-goods__category" class="goods-option">
+                    <option value="milk"   >Milk</option>
+                    <option value="meat"   >Meat</option>
+		</select>
+		<label for="user-nft-properties__goods-price" class="goods-option">Price</label>
+		<input id="user-nft-properties__goods-price" class="goods-option" type="text" />
+		<label for="user-nft-properties__token-image" class="uri-option">URI</label>
+		<input id="user-nft-properties__token-image" class="uri-option" type="text" />
 		<label for="user-nft-properties__preview_1">URI for preview image/video #1</label>
 		<input type="text" id="user-nft-properties__preview_1">
 		<label for="user-nft-properties__preview_2">URI for preview image/video #2</label>

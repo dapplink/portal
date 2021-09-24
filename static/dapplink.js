@@ -76,6 +76,7 @@ async function open_user_nft_tab () {
 		    $( "#user-nft-properties__preview_9"            ).val( "" )
 		    $( "#user-nft-properties__preview_0"            ).val( "" )
 		    $( "#user-nft-properties__detailed-description" ).val( "" )
+		    // TODO add goods properties
 		    $.getJSON( `http://${ domains[i] }.${HOST}/nft.json`, function (  nft, status  ) {
 			if ( status !== "success" ) {
 			    open_error_message_tab( "Error", "Can't read token properties" )
@@ -114,6 +115,7 @@ async function open_user_nft_tab () {
 			    $( "#user-nft-properties__detailed-description" ).val( "" )
 			}
 		    })
+		    NftPropertiesOptionsHandler()
 		    $( '#user-nft-properties__token-id' ).text(  tokens[ i ]  )
 		    $( '#user-nft-properties__token-domain' ).text(  domains[ i ]  )
 		    $( "#tab-user-nft-properties" ).show()
@@ -904,12 +906,23 @@ function updateCatalogue() {
     setTimeout( updateCatalogue, 5 * 1000 )
 }
 
+function NftPropertiesOptionsHandler() {
+    if ( this.value == 'goods' ) {
+	$( ".uri-option"   ).hide()
+	$( ".goods-option" ).show()
+    } else {
+	$( ".uri-option"   ).show()
+	$( ".goods-option" ).hide()
+    }
+}
+
 function init() {
 
     $( "#main-menu__home"      ).click(  openTab.bind( null, "home"      )  )
     $( "#main-menu__help"      ).click(  openTab.bind( null, "help"      )  )
     $( "#main-menu__downloads" ).click(  openTab.bind( null, "downloads" )  ) //
-    $( "#main-menu__shop"      ).click(  openShop                        ) // 
+    $( "#main-menu__shop"      ).click(  openShop                        )    // 
+    $( "#main-menu__goods"     ).click(  openTab.bind( null, "goods"     )  ) // 
     $( "#main-menu__www"       ).click(  openTab.bind( null, "www"       )  ) // 
     $( "#main-menu__dpwa"      ).click(  openTab.bind( null, "dpwa"      )  ) // 
     $( "#main-menu__art"       ).click(  openTab.bind( null, "art"       )  ) //
@@ -921,6 +934,8 @@ function init() {
     $( "#user-log-in-button" ).click( log_in )
 
     $( "#user-nft-make-button" ).click( open_make_new_nft_tab )
+
+    $( "#user-nft-properties__token-type" ).on( "change", NftPropertiesOptionsHandler )
     
     $( ".tab" ).hide()
     $( "#user-account-menu" ).hide()
